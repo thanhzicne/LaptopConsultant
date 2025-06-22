@@ -1,0 +1,53 @@
+﻿@model LaptopConsultant.Models.Laptop
+@{
+    ViewData["Title"] = @Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="py-16">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <img src="@Model.ImageUrl" alt="@Model.Name" class="w-full h-96 object-cover rounded-lg">
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">@Model.Name</h2>
+                <p class="text-gray-600 mb-4">@Model.Description</p>
+                <div class="mb-4">
+                    <span class="text-lg font-bold text-primary">@Model.Price.ToString("N0") ₫</span>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <i class="ri-cpu-line text-primary mr-2"></i>
+                            <span class="text-gray-600">CPU: @Model.CPU</span>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <i class="ri-hard-drive-line text-primary mr-2"></i>
+                            <span class="text-gray-600">RAM: @Model.RAM GB</span>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <i class="ri-hard-drive-line text-primary mr-2"></i>
+                            <span class="text-gray-600">SSD: @Model.SSD GB</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <i class="ri-computer-line text-primary mr-2"></i>
+                            <span class="text-gray-600">Màn hình: @Model.ScreenSize" Display</span>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <i class="ri-windows-line text-primary mr-2"></i>
+                            <span class="text-gray-600">HĐH: @Model.OperatingSystem</span>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <i class="ri-weight-line text-primary mr-2"></i>
+                            <span class="text-gray-600">Trọng lượng: @Model.Weight kg</span>
+                        </div>
+                    </div>
+                </div>
+                <a href="@Model.PurchaseLink" class="bg-primary text-white px-6 py-3 rounded-button hover:bg-blue-600 transition-colors">Mua ngay</a>
+            </div>
+        </div>
+    </div>
+</section>

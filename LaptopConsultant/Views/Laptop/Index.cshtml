@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Tư vấn Laptop";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-2xl font-bold mb-4">Tư vấn Laptop</h2>
+
+<form asp-action="Recommend" method="post" class="space-y-4">
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Nhu cầu sử dụng (cách nhau bằng dấu phẩy)</label>
+        <input type="text" name="Needs" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" placeholder="gaming, học tập, văn phòng" />
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Ngân sách tối đa (VNĐ)</label>
+        <input type="number" name="MaxBudget" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="30000000" />
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Thương hiệu (cách nhau bằng dấu phẩy)</label>
+        <input type="text" name="Brands" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" placeholder="Dell, Asus, HP" />
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Kích thước màn hình (inch)</label>
+        <input type="number" step="0.1" name="ScreenSize" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="13.4" />
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Dung lượng lưu trữ (GB)</label>
+        <input type="number" name="SSD" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="512" />
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700">RAM (GB)</label>
+        <input type="number" name="RAM" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="16" />
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700">CPU</label>
+        <input type="text" name="CPUs" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" placeholder="Intel Core i7-1165G7" />
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700">GPU</label>
+        <input type="text" name="GPUs" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" placeholder="NVIDIA RTX 3060" />
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Hệ điều hành</label>
+        <input type="text" name="OperatingSystem" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" placeholder="Windows 11 Home" />
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Trọng lượng tối đa (kg)</label>
+        <input type="number" step="0.1" name="MaxWeight" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="1.5" />
+    </div>
+    <button type="submit" class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600">Tư vấn</button>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="text-red-500 mt-4">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}

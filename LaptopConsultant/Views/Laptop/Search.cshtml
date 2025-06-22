@@ -1,0 +1,51 @@
+﻿@model IEnumerable<LaptopConsultant.Models.Laptop>
+@{
+    ViewData["Title"] = "Tìm kiếm laptop";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="py-16">
+    <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Kết quả tìm kiếm</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach (var laptop in Model)
+        {
+            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                <div class="relative">
+                    <img src="@laptop.ImageUrl" alt="@laptop.Name" class="w-full h-48 object-cover object-top">
+                </div>
+                <div class="p-4">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-2">@laptop.Name</h4>
+                    <div class="flex items-center mb-2">
+                        <div class="w-4 h-4 flex items-center justify-center text-primary mr-1">
+                            <i class="ri-cpu-line"></i>
+                        </div>
+                        <span class="text-sm text-gray-600">@laptop.CPU</span>
+                    </div>
+                    <div class="flex items-center mb-2">
+                        <div class="w-4 h-4 flex items-center justify-center text-primary mr-1">
+                            <i class="ri-hard-drive-line"></i>
+                        </div>
+                        <span class="text-sm text-gray-600">@laptop.RAM GB RAM, @laptop.SSD GB SSD</span>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <div class="w-4 h-4 flex items-center justify-center text-primary mr-1">
+                            <i class="ri-computer-line"></i>
+                        </div>
+                        <span class="text-sm text-gray-600">@laptop.ScreenSize" Display</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-lg font-bold text-primary">@laptop.Price.ToString("N0") ₫</span>
+                        <div class="flex space-x-2">
+                            <button class="bg-white text-primary p-2 rounded-full border border-primary hover:bg-blue-50 transition-colors compare-btn" data-laptop-id="@laptop.Id">
+                                <div class="w-5 h-5 flex items-center justify-center">
+                                    <i class="ri-compare-line"></i>
+                                </div>
+                            </button>
+                            <a href="@Url.Action("Details", new { id = laptop.Id })" class="bg-primary text-white px-3 py-2 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap">Chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

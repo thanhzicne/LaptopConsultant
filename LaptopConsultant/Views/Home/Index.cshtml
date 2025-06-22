@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Trang chủ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="text-center py-16">
+    <h1 class="text-4xl font-bold text-gray-900 mb-4">Chào mừng đến với Laptop Consultant</h1>
+    <p class="text-gray-600 max-w-2xl mx-auto mb-8">Tìm kiếm laptop phù hợp nhất với nhu cầu của bạn chỉ trong vài bước đơn giản.</p>
+    <a href="/Laptop" class="bg-primary text-white px-8 py-4 rounded-button text-lg font-medium hover:bg-blue-600 transition-colors shadow-md">Bắt đầu tư vấn</a>
+</section>
+
+<section id="featured-laptops" class="mb-16">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Laptop nổi bật</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">Khám phá những mẫu laptop được đánh giá cao nhất.</p>
+    </div>
+
+    @if (ViewBag.Laptops != null)
+    {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach (var laptop in ViewBag.Laptops)
+            {
+                <div class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="relative">
+                        <img src="@laptop.ImageUrl" alt="@laptop.Name" class="w-full h-48 object-cover object-top">
+                        <div class="absolute top-2 right-2 bg-primary text-white text-xs font-medium px-2 py-1 rounded">Top @laptop.Rating</div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">@laptop.Name</h4>
+                        <div class="flex items-center mb-2">
+                            <div class="w-4 h-4 flex items-center justify-center text-primary mr-1">
+                                <i class="ri-cpu-line"></i>
+                            </div>
+                            <span class="text-sm text-gray-600">@laptop.CPU</span>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <div class="w-4 h-4 flex items-center justify-center text-primary mr-1">
+                                <i class="ri-hard-drive-line"></i>
+                            </div>
+                            <span class="text-sm text-gray-600">@laptop.RAM GB RAM, @laptop.SSD GB SSD</span>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <div class="w-4 h-4 flex items-center justify-center text-primary mr-1">
+                                <i class="ri-computer-line"></i>
+                            </div>
+                            <span class="text-sm text-gray-600">@laptop.ScreenSize" Display</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-bold text-primary">@laptop.Price.ToString("N0") ₫</span>
+                            <div class="flex space-x-2">
+                                <button class="bg-white text-primary p-2 rounded-full border border-primary hover:bg-blue-50 transition-colors compare-btn" data-laptop-id="@laptop.Id">
+                                    <div class="w-5 h-5 flex items-center justify-center">
+                                        <i class="ri-compare-line"></i>
+                                    </div>
+                                </button>
+                                <a href="@Url.Action("Details", "Laptop", new { id = laptop.Id })" class="bg-primary text-white px-3 py-2 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap">Chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-center text-gray-600">Không có laptop nào để hiển thị.</p>
+    }
+</section>
