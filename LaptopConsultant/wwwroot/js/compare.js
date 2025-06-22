@@ -1,18 +1,18 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
-    const compareButtons = document.querySelectorAll('.compare-btn');
-    const compareList = [];
-    compareButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const laptopId = button.dataset.laptopId;
-            if (compareList.length < 3 && !compareList.includes(laptopId)) {
-                compareList.push(laptopId);
-                if (compareList.length >= 2) {
-                    window.location.href = `/Laptop/Compare?laptopIds=${compareList.join('&laptopIds=')}`;
-                }
-            } else if (compareList.includes(laptopId)) {
-                alert('Laptop này đã được thêm vào so sánh!');
+﻿document.querySelectorAll('.compare-btn').forEach(button => {
+    button.addEventListener('click', function (e) {
+        e.preventDefault(); // Ngăn hành vi mặc định của form (nếu cần)
+        const laptopId = this.getAttribute('data-laptop-id');
+        fetch('/Laptop/AddToCompare', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `laptopId=${laptopId}`
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = '/Laptop/Compare';
             } else {
-                alert('Bạn chỉ có thể so sánh tối đa 3 laptop!');
+                alert('Không thể thêm laptop vào danh sách so sánh.');
             }
         });
     });

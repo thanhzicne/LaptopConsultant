@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LaptopConsultant.Models;
 using LaptopConsultant.Services;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace LaptopConsultant.Controllers
 {
@@ -12,11 +14,10 @@ namespace LaptopConsultant.Controllers
             _laptopService = laptopService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var laptops = _laptopService.GetTopLaptopsByRating(6); // Lấy top 6 laptop theo rating
-            ViewBag.Laptops = laptops;
-            return View();
+            var featuredLaptops = await _laptopService.GetFeaturedLaptopsAsync(6); // Lấy 6 laptop nổi bật
+            return View(featuredLaptops);
         }
 
         public IActionResult Error()

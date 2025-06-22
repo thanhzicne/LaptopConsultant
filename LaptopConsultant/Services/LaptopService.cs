@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using LaptopConsultant.Models;
+﻿using LaptopConsultant.Models;
 using LaptopConsultant.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LaptopConsultant.Services
 {
@@ -13,77 +15,81 @@ namespace LaptopConsultant.Services
             _context = context;
         }
 
-        public List<Laptop> FilterLaptops(LaptopFilterViewModel criteria)
+        public async Task<List<Laptop>> GetFeaturedLaptopsAsync(int count)
         {
-            var query = _context.Laptops
-                .Include(l => l.Needs)
-                .AsQueryable();
-
-            if (criteria.Needs != null && criteria.Needs.Any())
-                query = query.Where(l => l.Needs.Any(n => criteria.Needs.Contains(n.Need)));
-
-            if (criteria.MinBudget.HasValue)
-                query = query.Where(l => l.Price >= criteria.MinBudget.Value);
-            if (criteria.MaxBudget.HasValue)
-                query = query.Where(l => l.Price <= criteria.MaxBudget.Value);
-
-            if (criteria.Brands != null && criteria.Brands.Any())
-                query = query.Where(l => criteria.Brands.Contains(l.Brand));
-
-            if (criteria.ScreenSize.HasValue)
-                query = query.Where(l => l.ScreenSize == criteria.ScreenSize.Value);
-
-            if (criteria.RAM.HasValue)
-                query = query.Where(l => l.RAM == criteria.RAM.Value);
-
-            if (criteria.SSD.HasValue)
-                query = query.Where(l => l.SSD == criteria.SSD.Value);
-
-            if (criteria.CPUs != null && criteria.CPUs.Any())
-                query = query.Where(l => criteria.CPUs.Contains(l.CPU));
-
-            if (criteria.GPUs != null && criteria.GPUs.Any())
-                query = query.Where(l => criteria.GPUs.Contains(l.GPU));
-
-            if (criteria.MaxWeight.HasValue)
-                query = query.Where(l => l.Weight <= criteria.MaxWeight.Value);
-
-            if (!string.IsNullOrEmpty(criteria.OperatingSystem))
-                query = query.Where(l => l.OperatingSystem == criteria.OperatingSystem);
-
-            return query.ToList();
-        }
-
-        public List<Laptop> SearchLaptops(string query)
-        {
-            return _context.Laptops
-                .Include(l => l.Needs)
-                .Where(l => l.Name.Contains(query) || l.Description.Contains(query) || l.Brand.Contains(query))
-                .ToList();
-        }
-
-        public Laptop GetLaptopById(int id)
-        {
-            return _context.Laptops
-                .Include(l => l.Needs)
-                .FirstOrDefault(l => l.Id == id);
-        }
-
-        public List<Laptop> GetLaptopsByIds(int[] ids)
-        {
-            return _context.Laptops
-                .Include(l => l.Needs)
-                .Where(l => ids.Contains(l.Id))
-                .ToList();
-        }
-
-        public List<Laptop> GetTopLaptopsByRating(int count)
-        {
-            return _context.Laptops
-                .Include(l => l.Needs)
-                .OrderByDescending(l => l.Rating)
+            return await _context.Laptops
+                .Where(l => l.IsFeatured)
                 .Take(count)
-                .ToList();
+                .ToListAsync();
+        }
+
+        public async Task<Laptop> GetLaptopByIdAsync(int id)
+        {
+            return await _context.Laptops.FindAsync(id);
+        }
+
+        public async Task<List<Laptop>> GetLaptopsByIdsAsync(List<int> ids)
+        {
+            return await _context.Laptops
+                .Where(l => ids.Contains(l.Id))
+                .ToListAsync();
+        }
+
+        public async Task<List<Laptop>> FilterLaptopsAsync(LaptopFilterViewModel filter)
+        {
+            var query = _context.Laptops.AsQueryable();
+
+            if (filter.Needs.Any())
+            {
+                query = query.Where(l => filter.Needs.Any(n => l.Needs.Contains(n)));
+            }
+
+            if (filter.Brands.Any())
+            {
+                query = query.Where(l => filter.Brands.Contains(l.Brand));
+            }
+
+            if (filter.Budget > 0)
+            {
+                query = query.Where(l => l.Price <= filter.Budget);
+            }
+
+            if (!string.IsNullOrEmpty(filter.ScreenSize))
+            {
+                query = query.Where(l => l.Screen.Contains(filter.ScreenSize));
+            }
+
+            if (!string.IsNullOrEmpty(filter.RAM))
+            {
+                query = query.Where(l => l.RAM.Contains(filter.RAM));
+            }
+
+            if (!string.IsNullOrEmpty(filter.Storage))
+            {
+                query = query.Where(l => l.Storage.Contains(filter.Storage));
+            }
+
+            if (filter.CPUs.Any())
+            {
+                query = query.Where(l => filter.CPUs.Any(c => l.CPU.ToLower().Contains(c.ToLower())));
+            }
+
+            if (filter.GPUs.Any())
+            {
+                query = query.Where(l => filter.GPUs.Any(g => l.GPU.ToLower().Contains(g.ToLower())));
+            }
+
+            if (filter.Weight > 0)
+            {
+                query = query.Where(l => l.Weight.Contains(filter.Weight.ToString()));
+            }
+
+            if (!string.IsNullOrEmpty(filter.OS))
+            {
+                query = query.Where(l => l.OS.ToLower().Contains(filter.OS.ToLower()));
+            }
+
+            return await query.ToListAsync();
         }
     }
 }

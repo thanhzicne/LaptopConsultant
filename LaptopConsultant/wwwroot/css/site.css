@@ -1,3 +1,16 @@
+﻿/* Reset mặc định */
+:where([class^="ri-"])::before {
+    content: "\f3c2";
+}
+
+/* Font mặc định */
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Style cho checkbox tùy chỉnh */
 .custom-checkbox input[type="checkbox"] {
     display: none;
 }
@@ -6,37 +19,261 @@
     display: inline-block;
     width: 20px;
     height: 20px;
-    border: 2px solid #3b82f6;
+    border: 2px solid #d1d5db;
     border-radius: 4px;
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: relative;
+    margin-right: 8px;
+    transition: all 0.2s ease;
 }
 
-.custom-checkbox input[type="checkbox"]:checked + .checkmark::after {
-    content: '\2713';
-    color: #3b82f6;
-    font-size: 16px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.custom-checkbox input[type="checkbox"]:checked + .checkmark {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
 }
 
-input[type="range"]::-webkit-slider-thumb {
+    .custom-checkbox input[type="checkbox"]:checked + .checkmark::after {
+        content: '';
+        position: absolute;
+        left: 6px;
+        top: 2px;
+        width: 6px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+/* Style cho radio tùy chỉnh */
+.custom-radio input[type="radio"] {
+    display: none;
+}
+
+.custom-radio .radio-mark {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #d1d5db;
+    border-radius: 50%;
+    position: relative;
+    margin-right: 8px;
+    transition: all 0.2s ease;
+}
+
+.custom-radio input[type="radio"]:checked + .radio-mark {
+    border-color: #3b82f6;
+}
+
+    .custom-radio input[type="radio"]:checked + .radio-mark::after {
+        content: '';
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        width: 8px;
+        height: 8px;
+        background-color: #3b82f6;
+        border-radius: 50%;
+    }
+
+/* Style cho range slider */
+input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
-    width: 20px;
-    height: 20px;
-    background: #3b82f6;
-    border-radius: 50%;
-    cursor: pointer;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 9999px;
+    outline: none;
+    transition: background 0.2s ease;
 }
 
-input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    background: #3b82f6;
-    border-radius: 50%;
-    cursor: pointer;
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #3b82f6;
+        cursor: pointer;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #3b82f6;
+        cursor: pointer;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease;
+    }
+
+    input[type="range"]:hover::-webkit-slider-thumb,
+    input[type="range"]:hover::-moz-range-thumb {
+        transform: scale(1.1);
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 9999px;
+    }
+
+    input[type="range"]::-moz-range-track {
+        width: 100%;
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 9999px;
+    }
+
+/* Style cho dropdown */
+.dropdown-container {
+    position: relative;
 }
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+    .dropdown-menu.show {
+        display: block;
+    }
+
+    .dropdown-menu .custom-checkbox,
+    .dropdown-menu .custom-radio {
+        padding: 8px 16px;
+        cursor: pointer;
+    }
+
+        .dropdown-menu .custom-checkbox:hover,
+        .dropdown-menu .custom-radio:hover {
+            background-color: #f9fafb;
+        }
+
+/* Style cho bảng so sánh */
+#compareTable table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#compareTable th,
+#compareTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+    #compareTable th:first-child,
+    #compareTable td:first-child {
+        background-color: #f9fafb;
+        font-weight: 500;
+    }
+
+    #compareTable th:not(:first-child) {
+        font-weight: 600;
+    }
+
+/* Style cho nút button */
+.rounded-button {
+    border-radius: 8px;
+}
+
+/* Style cho card laptop */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+/* Style cho biểu đồ */
+.echarts-container {
+    width: 100%;
+    height: 100%;
+}
+
+/* Style cho header sticky */
+header {
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Style cho footer */
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Style cho input tìm kiếm */
+input[type="text"] {
+    transition: all 0.2s ease;
+}
+
+    input[type="text"]:focus {
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+/* Style responsive */
+@media (max-width: 768px) {
+    .grid-cols-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-cols-5 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .dropdown-menu {
+        width: 100%;
+    }
+
+    #compareTable {
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 640px) {
+    .grid-cols-3,
+    .grid-cols-5 {
+        grid-template-columns: 1fr;
+    }
+
+    .flex-col-md {
+        flex-direction: column;
+    }
+
+    .w-64 {
+        width: 100%;
+    }
+}
+
+/* Style cho thanh cuộn */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3b82f6;
+    border-radius: 4px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #2563eb;
+    }

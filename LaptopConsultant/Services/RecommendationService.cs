@@ -1,21 +1,36 @@
 ﻿using LaptopConsultant.Models;
 using LaptopConsultant.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LaptopConsultant.Services
 {
     public class RecommendationService
     {
-        private readonly LaptopService _laptopService;
+        private readonly AppDbContext _context;
 
-        public RecommendationService(LaptopService laptopService)
+        public RecommendationService(AppDbContext context)
         {
-            _laptopService = laptopService;
+            _context = context;
         }
 
-        public List<Laptop> GetRecommendations(LaptopFilterViewModel criteria)
+        public async Task<List<Laptop>> GetRecommendedLaptopsAsync(LaptopFilterViewModel filter)
         {
-            var laptops = _laptopService.FilterLaptops(criteria);
-            return laptops.OrderByDescending(l => l.Rating).Take(3).ToList();
+            // Gợi ý dựa trên các laptop được chọn nhiều nhất trong UserSelections
+            var popularLaptops = await _context.UserSelections
+                .Where(s => filter.Needs.Any(n => s.Needs.Contains(n)))
+                .Where(s => s.SelectedLaptopId != null) // Lọc bỏ null ngay tại đây
+                .GroupBy(s => s.SelectedLaptopId)
+                .OrderByDescending(g => g.Count())
+                .Select(g => g.Key.Value) // Lấy giá trị int
+                .Take(3)
+                .ToListAsync();
+
+            return await _context.Laptops
+                .Where(l => popularLaptops.Contains(l.Id))
+                .ToListAsync();
         }
     }
 }

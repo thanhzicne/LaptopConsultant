@@ -1,29 +1,87 @@
-﻿@{
-    ViewData["Title"] = "So sánh Laptop";
+﻿@model LaptopConsultant.ViewModels.CompareViewModel
+@{
+    ViewData["Title"] = "So sánh laptop";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="text-2xl font-bold mb-4">So sánh Laptop</h2>
-
-@if (Model?.Laptops != null && Model.Laptops.Any())
-{
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach (var laptop in Model.Laptops)
-        {
-            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-md p-4">
-                <img src="@laptop.ImageUrl" alt="@laptop.Name" class="w-full h-48 object-cover object-top mb-4">
-                <h3 class="text-xl font-semibold">@laptop.Name</h3>
-                <p class="text-gray-600">Giá: @laptop.Price.ToString("N0") VNĐ</p>
-                <p class="text-gray-600">CPU: @laptop.CPU</p>
-                <p class="text-gray-600">RAM: @laptop.RAM GB</p>
-                <p class="text-gray-600">SSD: @laptop.SSD GB</p>
-            </div>
-        }
-    </div>
-}
-else
-{
-    <p class="text-red-500">Không có laptop nào được chọn để so sánh.</p>
-}
-
-<a href="@Url.Action("Index", "Laptop")" class="mt-4 inline-block text-primary hover:underline">Quay lại</a>
+<section class="py-16">
+    <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">So sánh laptop</h2>
+    @if (Model.Laptops.Any())
+    {
+        <div id="compareTable" class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2"></th>
+                        @foreach (var laptop in Model.Laptops)
+                        {
+                            <th class="px-4 py-2 text-center">@laptop.Name</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="px-4 py-2 font-medium">Hình ảnh</td>
+                        @foreach (var laptop in Model.Laptops)
+                        {
+                            <td class="px-4 py-2"><img src="@laptop.ImageUrl" alt="@laptop.Name" class="w-24 h-24 object-cover mx-auto"></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2 font-medium">Thương hiệu</td>
+                        @foreach (var laptop in Model.Laptops)
+                        {
+                            <td class="px-4 py-2 text-center">@laptop.Brand</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2 font-medium">CPU</td>
+                        @foreach (var laptop in Model.Laptops)
+                        {
+                            <td class="px-4 py-2 text-center">@laptop.CPU</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2 font-medium">RAM</td>
+                        @foreach (var laptop in Model.Laptops)
+                        {
+                            <td class="px-4 py-2 text-center">@laptop.RAM</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2 font-medium">Storage</td>
+                        @foreach (var laptop in Model.Laptops)
+                        {
+                            <td class="px-4 py-2 text-center">@laptop.Storage</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2 font-medium">Screen</td>
+                        @foreach (var laptop in Model.Laptops)
+                        {
+                            <td class="px-4 py-2 text-center">@laptop.Screen</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2 font-medium">GPU</td>
+                        @foreach (var laptop in Model.Laptops)
+                        {
+                            <td class="px-4 py-2 text-center">@laptop.GPU</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2 font-medium">Giá</td>
+                        @foreach (var laptop in Model.Laptops)
+                        {
+                            <td class="px-4 py-2 text-center">@laptop.Price.ToString("N0") ₫</td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-center text-gray-600">Chưa có laptop nào được chọn để so sánh.</p>
+    }
+</section>

@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using LaptopConsultant.Services;
+﻿using LaptopConsultant.Services;
 using LaptopConsultant.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace LaptopConsultant.Controllers
 {
@@ -13,13 +14,18 @@ namespace LaptopConsultant.Controllers
             _statisticsService = statisticsService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var topNeeds = await _statisticsService.GetTopNeedsAsync();
+            var topLaptops = await _statisticsService.GetTopLaptopsAsync();
+            var topBrands = await _statisticsService.GetTopBrandsAsync();
+            var searchTrends = await _statisticsService.GetSearchTrendsAsync();
             var viewModel = new StatisticsViewModel
             {
-                TopNeeds = _statisticsService.GetTopNeeds(),
-                TopLaptops = _statisticsService.GetTopLaptops(),
-                TopBrands = _statisticsService.GetTopBrands()
+                TopNeeds = topNeeds,
+                TopLaptops = topLaptops,
+                TopBrands = topBrands,
+                SearchTrends = searchTrends
             };
             return View(viewModel);
         }

@@ -1,12 +1,20 @@
-using Microsoft.EntityFrameworkCore;
-using LaptopConsultant.Models;
+﻿using LaptopConsultant.Models;
 using LaptopConsultant.Services;
-using LaptopConsultant.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Thêm dịch vụ MVC
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+// Thêm DbContext và các dịch vụ
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<LaptopService>();
@@ -15,7 +23,7 @@ builder.Services.AddScoped<StatisticsService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Cấu hình middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -25,16 +33,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-// Seed database
-using (var scope = app.Services.CreateScope())
-{
-    SeedData.Initialize(scope.ServiceProvider);
-}
 
 app.Run();

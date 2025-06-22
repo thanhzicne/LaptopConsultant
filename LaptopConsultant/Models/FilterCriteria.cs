@@ -1,20 +1,19 @@
-﻿using System.Collections.Generic;
-
-namespace LaptopConsultant.Models
+﻿namespace LaptopConsultant.Models
 {
     public class FilterCriteria
     {
         public int Id { get; set; }
-        public double? ScreenSize { get; set; }
-        public int? RAM { get; set; }
-        public int? SSD { get; set; }
-        public double? MaxWeight { get; set; }
-        public string OperatingSystem { get; set; }
-        public List<FilterCriteriaCPU> CPUs { get; set; } = new List<FilterCriteriaCPU>();
-        public List<FilterCriteriaGPU> GPUs { get; set; } = new List<FilterCriteriaGPU>();
-        public List<string> Needs { get; set; } // Giữ để tương thích với logic hiện tại
-        public decimal? MinBudget { get; set; }
-        public decimal? MaxBudget { get; set; }
-        public List<string> Brands { get; set; } // Giữ để tương thích với logic hiện tại
+        public string Needs { get; set; } // Nhu cầu: Gaming, Học tập, Văn phòng, v.v.
+        public string Brands { get; set; } // Thương hiệu
+        public decimal MinBudget { get; set; }
+        public decimal MaxBudget { get; set; }
+        public string ScreenSizes { get; set; } // Kích thước màn hình
+        public string RAM { get; set; }
+        public string Storage { get; set; }
+        public string CPUs { get; set; }
+        public string GPUs { get; set; }
+        public decimal MinWeight { get; set; }
+        public decimal MaxWeight { get; set; }
+        public string OS { get; set; }
     }
 }

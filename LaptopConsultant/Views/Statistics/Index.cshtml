@@ -1,59 +1,22 @@
-﻿@{
+﻿@model LaptopConsultant.ViewModels.StatisticsViewModel
+@{
     ViewData["Title"] = "Thống kê xu hướng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="text-2xl font-bold mb-4">Thống kê xu hướng</h2>
-
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <!-- Biểu đồ Nhu cầu phổ biến -->
-    <div class="bg-white p-4 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold mb-2">Nhu cầu phổ biến</h3>
-        <div id="needsChart" style="height: 300px;"></div>
+<section class="py-16">
+    <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Thống kê xu hướng</h2>
+    <div class="container mx-auto px-4">
+        <h3 class="text-xl font-semibold mb-4">Top 5 nhu cầu phổ biến</h3>
+        <div id="needsChart" class="echarts-container h-96"></div>
+        <h3 class="text-xl font-semibold mb-4 mt-8">Top 5 laptop được chọn</h3>
+        <div id="laptopsChart" class="echarts-container h-96"></div>
+        <h3 class="text-xl font-semibold mb-4 mt-8">Top 5 thương hiệu</h3>
+        <div id="brandsChart" class="echarts-container h-96"></div>
     </div>
+</section>
 
-    <!-- Biểu đồ Laptop hàng đầu -->
-    <div class="bg-white p-4 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold mb-2">Laptop hàng đầu</h3>
-        <div id="laptopsChart" style="height: 300px;"></div>
-    </div>
-
-    <!-- Biểu đồ Thương hiệu phổ biến -->
-    <div class="bg-white p-4 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold mb-2">Thương hiệu phổ biến</h3>
-        <div id="brandsChart" style="height: 300px;"></div>
-    </div>
-</div>
-
-<script src="~/lib/echarts/echarts.min.js"></script>
-<script>
-    // Biểu đồ Nhu cầu
-    var needsChart = echarts.init(document.getElementById('needsChart'));
-    var needsOption = {
-        title: { text: 'Top 5 Nhu cầu' },
-        xAxis: { type: 'category', data: @Html.Raw(Json.Serialize(Model.TopNeeds.Keys)) },
-        yAxis: { type: 'value' },
-        series: [{ type: 'bar', data: @Html.Raw(Json.Serialize(Model.TopNeeds.Values)) }]
-    };
-    needsChart.setOption(needsOption);
-
-    // Biểu đồ Laptop
-    var laptopsChart = echarts.init(document.getElementById('laptopsChart'));
-    var laptopsOption = {
-        title: { text: 'Top 5 Laptop' },
-        xAxis: { type: 'category', data: @Html.Raw(Json.Serialize(Model.TopLaptops.Keys)) },
-        yAxis: { type: 'value' },
-        series: [{ type: 'bar', data: @Html.Raw(Json.Serialize(Model.TopLaptops.Values)) }]
-    };
-    laptopsChart.setOption(laptopsOption);
-
-    // Biểu đồ Thương hiệu
-    var brandsChart = echarts.init(document.getElementById('brandsChart'));
-    var brandsOption = {
-        title: { text: 'Top 5 Thương hiệu' },
-        xAxis: { type: 'category', data: @Html.Raw(Json.Serialize(Model.TopBrands.Keys)) },
-        yAxis: { type: 'value' },
-        series: [{ type: 'bar', data: @Html.Raw(Json.Serialize(Model.TopBrands.Values)) }]
-    };
-    brandsChart.setOption(brandsOption);
-</script>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="~/js/charts.js" asp-append-version="true"></script>
+}
