@@ -1,0 +1,92 @@
+﻿@model LaptopConsultant.ViewModels.CompareViewModel
+@{
+    ViewData["Title"] = "Chọn laptop để so sánh";
+    var compareList = ViewBag.CompareList as List<int> ?? new List<int>();
+}
+
+<section class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center animate-fade-in">Chọn laptop để so sánh</h2>
+        <div class="mb-4 text-center">
+            <form asp-action="SelectForCompare" method="get" class="inline-flex max-w-md w-full">
+                <input type="text" name="searchTerm" placeholder="Tìm kiếm laptop..." class="border border-gray-300 rounded-l-md px-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary">
+                <button type="submit" class="bg-primary text-white px-4 py-2 rounded-r-md hover:bg-blue-600 text-sm">Tìm kiếm</button>
+            </form>
+        </div>
+        @if (TempData["Warning"] != null)
+        {
+            <div class="text-center text-yellow-600 text-sm mb-3">@TempData["Warning"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="text-center text-red-600 text-sm mb-3">@TempData["Error"]</div>
+        }
+        @if (Model.Laptops.Any())
+        {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach (var laptop in Model.Laptops)
+                {
+                    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden transform transition-transform hover:-translate-y-1 hover:shadow-lg">
+                        <div class="relative">
+                            <img src="@laptop.ImageUrl" alt="@laptop.Name" class="w-full h-40 object-cover object-top">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="text-base font-semibold text-gray-900 mb-2">@laptop.Name</h4>
+                            <div class="flex items-center mb-2">
+                                <span class="text-xs text-gray-600">@laptop.CPU, @laptop.RAM, @laptop.Storage</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-base font-bold text-primary">@laptop.Price.ToString("N0") ₫</span>
+                                <form asp-action="AddToCompare" asp-controller="Laptop" method="post">
+                                    <input type="hidden" name="laptopId" value="@laptop.Id" />
+                                    <button type="submit" class="btn-primary bg-primary text-white px-3 py-1.5 rounded-md hover:bg-blue-600 text-sm">Thêm vào so sánh</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-gray-600 text-sm">Không tìm thấy laptop nào.</p>
+        }
+    </div>
+</section>
+
+<!-- Thanh cố định -->
+<div class="fixed bottom-0 left-0 w-full bg-gray-900 text-white p-3 z-50 shadow-md">
+    <div class="flex justify-center items-center space-x-3">
+        @for (int i = 0; i < 3; i++)
+        {
+            var selectedLaptopId = compareList.Count > i ? compareList[i] : 0;
+            var isSelected = compareList.Contains(selectedLaptopId);
+            if (isSelected)
+            {
+                <div class="relative bg-blue-600 text-white px-4 py-2 rounded-md">
+                    Sản phẩm @(i + 1)
+                    <form asp-action="RemoveFromCompare" asp-controller="Laptop" method="post" class="absolute top-0 right-0 mt-1 mr-1">
+                        <input type="hidden" name="laptopId" value="@selectedLaptopId" />
+                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm">×</button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="bg-gray-700 text-gray-400 px-4 py-2 rounded-md cursor-not-allowed" data-slot="@(i + 1)">
+                    Sản phẩm @(i + 1)
+                </div>
+            }
+        }
+        @if (compareList.Count >= 2)
+        {
+            <form asp-action="CompareNow" asp-controller="Laptop" method="post" class="ml-3">
+                <button type="submit" class="btn-danger btn-danger text-white px-4 py-2 rounded-md hover:bg-blue-600 text-sm">So sánh ngay</button>
+            </form>
+        }
+        else
+        {
+            <button class="bg-gray-500 text-gray-300 px-4 py-2 rounded-md cursor-not-allowed text-sm" disabled>So sánh ngay</button>
+        }
+    </div>
+</div>

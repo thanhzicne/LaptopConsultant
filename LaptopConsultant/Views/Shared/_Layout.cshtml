@@ -1,93 +1,109 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - Tư vấn Laptop</title>
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-link {
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+            .nav-link:hover {
+                color: #2563eb;
+                transform: translateY(-1px);
+            }
+
+        .dropdown-menu {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-primary {
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+            .btn-primary:hover {
+                transform: scale(1.03);
+            }
+    </style>
 </head>
-<body>
-    <header class="bg-white shadow sticky top-0 z-50">
-        <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="/" class="text-xl font-bold text-gray-900">Logo</a>
             <div class="flex items-center space-x-4">
-                <a href="@Url.Action("Index", "Home")" class="text-2xl font-bold text-primary">logo</a>
-            </div>
-            <div class="flex items-center space-x-6">
-                <a href="@Url.Action("Index", "Home")" class="text-gray-700 hover:text-primary transition-colors">Trang chủ</a>
-                <a href="@Url.Action("Index", "Laptop")" class="text-gray-700 hover:text-primary transition-colors">Tư vấn</a>
-                <a href="@Url.Action("Compare", "Laptop")" class="text-gray-700 hover:text-primary transition-colors">So sánh</a>
-                <a href="@Url.Action("Index", "Statistics")" class="text-gray-700 hover:text-primary transition-colors">Thống kê</a>
+                <a href="@Url.Action("Index", "Home")" class="nav-link text-gray-700 hover:text-primary text-sm">Trang chủ</a>
+                <a href="@Url.Action("Index", "Laptop")" class="nav-link text-gray-700 hover:text-primary text-sm">Tư vấn</a>
+                <a href="@Url.Action("Compare", "Laptop")" class="nav-link text-gray-700 hover:text-primary text-sm">So sánh</a>
+                <a href="@Url.Action("Index", "Statistics")" class="nav-link text-gray-700 hover:text-primary text-sm">Thống kê</a>
+                <div class="relative">
+                    <form class="flex">
+                        <input type="text" placeholder="Tìm kiếm..." class="border border-gray-300 rounded-l-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                        <button type="submit" class="bg-primary text-white px-3 py-1.5 rounded-r-md hover:bg-blue-600 text-sm">Tìm</button>
+                    </form>
+                </div>
             </div>
         </nav>
     </header>
 
+    <!-- Main Content -->
     <main>
         @RenderBody()
     </main>
 
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">logo</h3>
-                    <p class="text-gray-400">Hệ thống tư vấn laptop thông minh giúp bạn tìm chiếc laptop hoàn hảo dựa trên nhu cầu và ngân sách.</p>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Liên kết nhanh</h3>
-                    <ul class="space-y-2">
-                        <li><a href="@Url.Action("Index", "Home")" class="text-gray-400 hover:text-white">Trang chủ</a></li>
-                        <li><a href="@Url.Action("Index", "Laptop")" class="text-gray-400 hover:text-white">Tư vấn laptop</a></li>
-                        <li><a href="@Url.Action("Compare", "Laptop")" class="text-gray-400 hover:text-white">So sánh laptop</a></li>
-                        <li><a href="@Url.Action("Index", "Statistics")" class="text-gray-400 hover:text-white">Thống kê xu hướng</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Tin tức công nghệ</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Hỗ trợ</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Hướng dẫn sử dụng</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Câu hỏi thường gặp</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Liên hệ hỗ trợ</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Chính sách bảo mật</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Điều khoản sử dụng</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Liên hệ</h3>
-                    <ul class="space-y-2">
-                        <li class="flex items-center">
-                            <i class="ri-map-pin-line mr-2"></i>
-                            <span>123 Nguyễn Văn Linh, Quận 7, TP. Hồ Chí Minh</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="ri-phone-line mr-2"></i>
-                            <span>0123 456 789</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="ri-mail-line mr-2"></i>
-                            <span>info@tuvanlaptopdep.vn</span>
-                        </li>
-                    </ul>
-                    <div class="mt-4">
-                        <h4 class="text-md font-semibold mb-2">Đăng ký nhận tin</h4>
-                        <form>
-                            <input type="email" placeholder="Nhập email của bạn" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-primary">
-                            <button type="submit" class="mt-2 bg-primary text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">Đăng ký</button>
-                        </form>
-                    </div>
-                </div>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div>
+                <h3 class="text-lg font-bold mb-3">Logo</h3>
+                <p class="text-gray-400 text-sm">Hệ thống tư vấn laptop thông minh giúp bạn tìm chiếc laptop hoàn hảo.</p>
             </div>
-            <div class="mt-8 border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-400">© 2025 Tư vấn Laptop. Tất cả quyền được bảo lưu.</p>
-                <div class="flex space-x-4 mt-4 md:mt-0">
-                    <span>Thanh toán qua:</span>
-                    <img src="https://via.placeholder.com/40x24" alt="Visa" class="h-6">
-                    <img src="https://via.placeholder.com/40x24" alt="MasterCard" class="h-6">
-                    <img src="https://via.placeholder.com/40x24" alt="PayPal" class="h-6">
-                    <img src="https://via.placeholder.com/40x24" alt="Bank" class="h-6">
-                </div>
+            <div>
+                <h3 class="text-lg font-bold mb-3">Liên kết nhanh</h3>
+                <ul class="space-y-1">
+                    <li><a href="@Url.Action("Index", "Home")" class="text-gray-400 hover:text-primary nav-link text-sm">Trang chủ</a></li>
+                    <li><a href="@Url.Action("Index", "Laptop")" class="text-gray-400 hover:text-primary nav-link text-sm">Tư vấn laptop</a></li>
+                    <li><a href="@Url.Action("Compare", "Laptop")" class="text-gray-400 hover:text-primary nav-link text-sm">So sánh laptop</a></li>
+                    <li><a href="@Url.Action("Index", "Statistics")" class="text-gray-400 hover:text-primary nav-link text-sm">Thống kê xu hướng</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-primary nav-link text-sm">Tin tức công nghệ</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold mb-3">Hỗ trợ</h3>
+                <ul class="space-y-1">
+                    <li><a href="#" class="text-gray-400 hover:text-primary nav-link text-sm">Hướng dẫn sử dụng</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-primary nav-link text-sm">Câu hỏi thường gặp</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-primary nav-link text-sm">Liên hệ hỗ trợ</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-primary nav-link text-sm">Chính sách bảo mật</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-primary nav-link text-sm">Điều khoản sử dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold mb-3">Liên hệ</h3>
+                <p class="text-gray-400 text-sm mb-2"><i class="ri-map-pin-line mr-1"></i>123 Nguyễn Văn Linh, Quận 7, TP. Hồ Chí Minh</p>
+                <p class="text-gray-400 text-sm mb-2"><i class="ri-phone-line mr-1"></i>0123 456 789</p>
+                <p class="text-gray-400 text-sm mb-3"><i class="ri-mail-line mr-1"></i>info@tuvanlaptopdep.vn</p>
+                <h4 class="text-base font-semibold mb-2">Đăng ký nhận tin</h4>
+                <form class="flex">
+                    <input type="email" placeholder="Email của bạn" class="border border-gray-600 rounded-l-md px-3 py-1.5 bg-gray-800 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                    <button type="submit" class="bg-primary text-white px-3 py-1.5 rounded-r-md hover:bg-blue-600 text-sm">Đăng ký</button>
+                </form>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-6 pt-3 text-center">
+            <p class="text-gray-400 text-sm">© 2025 Tư vấn Laptop. Tất cả quyền được bảo lưu.</p>
+            <div class="flex justify-center space-x-3 mt-2">
+                <img src="/images/visa.png" alt="Visa" class="h-5">
+                <img src="/images/mastercard.png" alt="Mastercard" class="h-5">
+                <img src="/images/paypal.png" alt="Paypal" class="h-5">
+                <img src="/images/momo.png" alt="Momo" class="h-5">
             </div>
         </div>
     </footer>

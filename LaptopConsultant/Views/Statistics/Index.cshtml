@@ -1,22 +1,184 @@
-﻿@model LaptopConsultant.ViewModels.StatisticsViewModel
-@{
-    ViewData["Title"] = "Thống kê xu hướng";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống kê xu hướng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+        }
 
-<section class="py-16">
-    <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Thống kê xu hướng</h2>
-    <div class="container mx-auto px-4">
-        <h3 class="text-xl font-semibold mb-4">Top 5 nhu cầu phổ biến</h3>
-        <div id="needsChart" class="echarts-container h-96"></div>
-        <h3 class="text-xl font-semibold mb-4 mt-8">Top 5 laptop được chọn</h3>
-        <div id="laptopsChart" class="echarts-container h-96"></div>
-        <h3 class="text-xl font-semibold mb-4 mt-8">Top 5 thương hiệu</h3>
-        <div id="brandsChart" class="echarts-container h-96"></div>
-    </div>
-</section>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-@section Scripts {
+        h2 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+            .legend span {
+                margin-left: 10px;
+            }
+    </style>
+</head>
+<body>
+    <section class="py-16">
+        <h2>Thống kê xu hướng</h2>
+        <div class="container">
+            <p class="text-center mb-4">Xem các xu hướng tìm kiếm và lựa chọn laptop phổ biến trong thời gian qua.</p>
+            <div class="grid">
+                <div class="chart-container">
+                    <h3>Top 5 nhu cầu phổ biến</h3>
+                    <div id="needsChart" style="height: 300px;"></div>
+                </div>
+                <div class="chart-container">
+                    <h3>Top 5 laptop được chọn</h3>
+                    <div id="laptopsChart" style="height: 300px;"></div>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="chart-container">
+                    <h3>Thương hiệu phổ biến</h3>
+                    <div id="brandsChart" style="height: 300px;"></div>
+                </div>
+                <div class="chart-container">
+                    <h3>Xu hướng tìm kiếm theo thời gian</h3>
+                    <div id="trendsChart" style="height: 300px;"></div>
+                    <div class="legend">
+                        <span style="color: #1E90FF;">Gaming</span>
+                        <span style="color: #32CD32;">Học tập</span>
+                        <span style="color: #FFA500;">Văn phòng</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <script src="~/js/charts.js" asp-append-version="true"></script>
-}
+    <script>
+        // Khởi tạo các biểu đồ
+        const needsChart = echarts.init(document.getElementById('needsChart'));
+        const laptopsChart = echarts.init(document.getElementById('laptopsChart'));
+        const brandsChart = echarts.init(document.getElementById('brandsChart'));
+        const trendsChart = echarts.init(document.getElementById('trendsChart'));
+
+        // Dữ liệu mẫu
+        const needsData = {
+            'Lập trình': 1200,
+            'Đi học': 1000,
+            'Đi làm': 900,
+            'Học tập': 800,
+            'Gaming': 1500
+        };
+        const laptopsData = {
+            'Lenovo ThinkPad X1': 700,
+            'HP Spectre 360': 650,
+            'Asus ROG Zephyrus G14': 600,
+            'MacBook Air M1': 800,
+            'Dell XPS 13': 750
+        };
+        const brandsData = {
+            'Dell': 25,
+            'HP': 20,
+            'Asus': 15,
+            'Lenovo': 25,
+            'Apple': 15
+        };
+        const trendsData = {
+            'Gaming': [100, 120, 150, 200, 250, 300, 350, 400, 450, 500, 450, 400],
+            'Học tập': [200, 220, 250, 300, 320, 340, 360, 380, 400, 420, 400, 380],
+            'Văn phòng': [150, 170, 190, 210, 230, 250, 270, 290, 310, 330, 310, 290]
+        };
+
+        // Cấu hình biểu đồ
+        needsChart.setOption({
+            tooltip: {},
+            xAxis: { type: 'category', data: Object.keys(needsData) },
+            yAxis: { type: 'value' },
+            series: [{ type: 'bar', data: Object.values(needsData), itemStyle: { color: '#1E90FF' } }]
+        });
+
+        laptopsChart.setOption({
+           
+            tooltip: {},
+            xAxis: { type: 'category', data: Object.keys(laptopsData) },
+            yAxis: { type: 'value' },
+            series: [{ type: 'bar', data: Object.values(laptopsData), itemStyle: { color: '#32CD32' } }]
+        });
+
+        brandsChart.setOption({
+           
+            tooltip: { trigger: 'item' },
+            series: [{
+                type: 'pie',
+                radius: '60%',
+                data: Object.keys(brandsData).map(key => ({ name: key, value: brandsData[key] })),
+                itemStyle: {
+                    color: function(params) {
+                        const colors = ['#1E90FF', '#32CD32', '#FFA500', '#FF69B4', '#6A5ACD'];
+                        return colors[params.dataIndex % colors.length];
+                    }
+                }
+            }]
+        });
+
+        trendsChart.setOption({
+            
+            tooltip: { trigger: 'axis' },
+            legend: { data: ['Gaming', 'Học tập', 'Văn phòng'], right: 0 },
+            xAxis: { type: 'category', data: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'] },
+            yAxis: { type: 'value' },
+            series: [
+                { name: 'Gaming', type: 'line', data: trendsData['Gaming'], itemStyle: { color: '#1E90FF' } },
+                { name: 'Học tập', type: 'line', data: trendsData['Học tập'], itemStyle: { color: '#32CD32' } },
+                { name: 'Văn phòng', type: 'line', data: trendsData['Văn phòng'], itemStyle: { color: '#FFA500' } }
+            ]
+        });
+
+        // Điều chỉnh kích thước khi thay đổi cửa sổ
+        window.addEventListener('resize', function() {
+            needsChart.resize();
+            laptopsChart.resize();
+            brandsChart.resize();
+            trendsChart.resize();
+        });
+    </script>
+</body>
+</html>

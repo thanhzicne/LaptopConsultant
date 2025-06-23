@@ -44,10 +44,18 @@ namespace LaptopConsultant.Controllers
             return View(laptop);
         }
 
-        // GET: /Laptop/Compare
-        public IActionResult Compare()
+        // GET: /Laptop/SelectForCompare
+        public async Task<IActionResult> SelectForCompare(string searchTerm = "")
         {
-            return View(new CompareViewModel());
+            var laptops = await _laptopService.GetAllLaptopsAsync();
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                laptops = laptops.Where(l => l.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || l.Brand.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            var compareList = HttpContext.Session.GetObject<List<int>>("CompareList") ?? new List<int>();
+            var viewModel = new CompareViewModel { Laptops = laptops };
+            ViewBag.CompareList = compareList; // Truyền danh sách đã chọn vào view
+            return View("SelectForCompare", viewModel);
         }
 
         // POST: /Laptop/AddToCompare
@@ -58,33 +66,84 @@ namespace LaptopConsultant.Controllers
             if (compareList.Count >= 3)
             {
                 TempData["Error"] = "Bạn chỉ có thể so sánh tối đa 3 laptop.";
-                return RedirectToAction("Compare");
+                return RedirectToAction("SelectForCompare");
             }
             if (!compareList.Contains(laptopId))
             {
                 compareList.Add(laptopId);
                 HttpContext.Session.SetObject("CompareList", compareList);
             }
-            return RedirectToAction("Compare");
+            return RedirectToAction("SelectForCompare");
+        }
+
+        // GET: /Laptop/Compare
+        public async Task<IActionResult> Compare()
+        {
+            var compareList = HttpContext.Session.GetObject<List<int>>("CompareList") ?? new List<int>();
+            if (compareList.Count < 2)
+            {
+                TempData["Warning"] = "Vui lòng chọn ít nhất 2 laptop để so sánh.";
+                return RedirectToAction("SelectForCompare");
+            }
+            if (compareList.Count > 3)
+            {
+                TempData["Error"] = "Bạn chỉ có thể so sánh tối đa 3 laptop. Vui lòng xóa bớt.";
+                return RedirectToAction("SelectForCompare");
+            }
+            var laptops = await _laptopService.GetLaptopsByIdsAsync(compareList);
+            var viewModel = new CompareViewModel { Laptops = laptops };
+            ViewBag.ShowDifferencesOnly = false;
+            return View("Compare", viewModel);
+        }
+
+        // GET: /Laptop/CompareLaptops
+        public async Task<IActionResult> CompareLaptops(bool showDifferencesOnly = false)
+        {
+            var compareList = HttpContext.Session.GetObject<List<int>>("CompareList") ?? new List<int>();
+            if (compareList.Count < 2)
+            {
+                TempData["Warning"] = "Vui lòng chọn ít nhất 2 laptop để so sánh.";
+                return RedirectToAction("SelectForCompare");
+            }
+            if (compareList.Count > 3)
+            {
+                TempData["Error"] = "Bạn chỉ có thể so sánh tối đa 3 laptop. Vui lòng xóa bớt.";
+                return RedirectToAction("SelectForCompare");
+            }
+            var laptops = await _laptopService.GetLaptopsByIdsAsync(compareList);
+            var viewModel = new CompareViewModel { Laptops = laptops };
+            ViewBag.ShowDifferencesOnly = showDifferencesOnly;
+            return View("Compare", viewModel);
         }
 
         // POST: /Laptop/RemoveFromCompare
         [HttpPost]
-        public IActionResult RemoveFromCompare(int laptopId)
+        public async Task<IActionResult> RemoveFromCompare(int laptopId)
         {
             var compareList = HttpContext.Session.GetObject<List<int>>("CompareList") ?? new List<int>();
             compareList.Remove(laptopId);
             HttpContext.Session.SetObject("CompareList", compareList);
-            return RedirectToAction("Compare");
-        }
-
-        // GET: /Laptop/CompareLaptops
-        public async Task<IActionResult> CompareLaptops()
-        {
-            var compareList = HttpContext.Session.GetObject<List<int>>("CompareList") ?? new List<int>();
             var laptops = await _laptopService.GetLaptopsByIdsAsync(compareList);
             var viewModel = new CompareViewModel { Laptops = laptops };
-            return View("Compare", viewModel);
+            ViewBag.ShowDifferencesOnly = ViewBag.ShowDifferencesOnly as bool? ?? false;
+            if (compareList.Count < 2)
+            {
+                return RedirectToAction("SelectForCompare");
+            }
+            return View("Compare", viewModel); // Ở lại trang so sánh nếu còn ít nhất 2 sản phẩm
+        }
+
+        // POST: /Laptop/CompareNow
+        [HttpPost]
+        public IActionResult CompareNow()
+        {
+            var compareList = HttpContext.Session.GetObject<List<int>>("CompareList") ?? new List<int>();
+            if (compareList.Count < 2)
+            {
+                TempData["Warning"] = "Vui lòng chọn ít nhất 2 laptop để so sánh.";
+                return RedirectToAction("SelectForCompare");
+            }
+            return RedirectToAction("Compare");
         }
     }
 }

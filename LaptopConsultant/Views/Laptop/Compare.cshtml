@@ -1,11 +1,23 @@
 ﻿@model LaptopConsultant.ViewModels.CompareViewModel
 @{
     ViewData["Title"] = "So sánh laptop";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool showDifferencesOnly = ViewBag.ShowDifferencesOnly != null && (bool)ViewBag.ShowDifferencesOnly;
 }
 
 <section class="py-16">
     <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">So sánh laptop</h2>
+    @if (TempData["Warning"] != null)
+    {
+        <div class="text-center text-yellow-600 mb-4">@TempData["Warning"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="text-center text-red-600 mb-4">@TempData["Error"]</div>
+    }
+    <div class="mb-6 text-center">
+        <a asp-action="CompareLaptops" asp-route-showDifferencesOnly="true" class=" bg-primary text-dark px-4 py-2 rounded-lg hover:bg-blue-600 mr-2">Chỉ xem điểm khác biệt</a>
+        <a asp-action="CompareLaptops" asp-route-showDifferencesOnly="false" class="bg-white text-primary px-4 py-2 rounded-lg border border-primary hover:bg-blue-50">Xem tất cả</a>
+    </div>
     @if (Model.Laptops.Any())
     {
         <div id="compareTable" class="overflow-x-auto">
@@ -31,57 +43,66 @@
                         <td class="px-4 py-2 font-medium">Thương hiệu</td>
                         @foreach (var laptop in Model.Laptops)
                         {
-                            <td class="px-4 py-2 text-center">@laptop.Brand</td>
+                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.Brand == laptop.Brand) ? "" : laptop.Brand)</td>
                         }
                     </tr>
                     <tr>
                         <td class="px-4 py-2 font-medium">CPU</td>
                         @foreach (var laptop in Model.Laptops)
                         {
-                            <td class="px-4 py-2 text-center">@laptop.CPU</td>
+                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.CPU == laptop.CPU) ? "" : laptop.CPU)</td>
                         }
                     </tr>
                     <tr>
                         <td class="px-4 py-2 font-medium">RAM</td>
                         @foreach (var laptop in Model.Laptops)
                         {
-                            <td class="px-4 py-2 text-center">@laptop.RAM</td>
+                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.RAM == laptop.RAM) ? "" : laptop.RAM)</td>
                         }
                     </tr>
                     <tr>
                         <td class="px-4 py-2 font-medium">Storage</td>
                         @foreach (var laptop in Model.Laptops)
                         {
-                            <td class="px-4 py-2 text-center">@laptop.Storage</td>
+                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.Storage == laptop.Storage) ? "" : laptop.Storage)</td>
                         }
                     </tr>
                     <tr>
                         <td class="px-4 py-2 font-medium">Screen</td>
                         @foreach (var laptop in Model.Laptops)
                         {
-                            <td class="px-4 py-2 text-center">@laptop.Screen</td>
+                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.Screen == laptop.Screen) ? "" : laptop.Screen)</td>
                         }
                     </tr>
                     <tr>
                         <td class="px-4 py-2 font-medium">GPU</td>
                         @foreach (var laptop in Model.Laptops)
                         {
-                            <td class="px-4 py-2 text-center">@laptop.GPU</td>
+                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.GPU == laptop.GPU) ? "" : laptop.GPU)</td>
                         }
                     </tr>
                     <tr>
                         <td class="px-4 py-2 font-medium">Giá</td>
                         @foreach (var laptop in Model.Laptops)
                         {
-                            <td class="px-4 py-2 text-center">@laptop.Price.ToString("N0") ₫</td>
+                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.Price == laptop.Price) ? "" : laptop.Price.ToString("N0") + " ₫")</td>
                         }
                     </tr>
                 </tbody>
             </table>
         </div>
+        <div class="mt-6 text-center">
+            @foreach (var laptop in Model.Laptops)
+            {
+                <form asp-action="RemoveFromCompare" asp-controller="Laptop" method="post" class="inline-block mr-2">
+                    <input type="hidden" name="laptopId" value="@laptop.Id" />
+                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Xóa</button>
+                </form>
+            }
+        </div>
     }
     else
     {
-        <p class="text-center text-gray-600">Chưa có laptop nào được chọn để so sánh.</p>
+        <p class="text-center text-gray-600">Chưa có laptop nào được chọn để so sánh. <a asp-action="SelectForCompare" class="text-primary">Chọn ngay</a></p>
     }
 </section>

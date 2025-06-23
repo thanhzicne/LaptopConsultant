@@ -14,7 +14,10 @@ namespace LaptopConsultant.Services
         {
             _context = context;
         }
-
+        public async Task<List<Laptop>> GetAllLaptopsAsync()
+        {
+            return await _context.Laptops.ToListAsync();
+        }
         public async Task<List<Laptop>> GetFeaturedLaptopsAsync(int count)
         {
             return await _context.Laptops
