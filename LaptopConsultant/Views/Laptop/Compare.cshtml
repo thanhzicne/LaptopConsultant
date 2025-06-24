@@ -401,11 +401,11 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">@Model.Laptops.Min(l => l.Price).ToString("N0")</div>
-                    <div class="stat-label">Giá thấp nhất (₫)</div>
+                    <div class="stat-label">Giá thấp nhất VNĐ</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">@Model.Laptops.Max(l => l.Price).ToString("N0")</div>
-                    <div class="stat-label">Giá cao nhất (₫)</div>
+                    <div class="stat-label">Giá cao nhất VNĐ</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">@Model.Laptops.Select(l => l.Brand).Distinct().Count()</div>

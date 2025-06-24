@@ -30,6 +30,17 @@ namespace LaptopConsultant.Controllers
         {
             var laptops = await _laptopService.FilterLaptopsAsync(filter);
             filter.Laptops = laptops;
+
+            // Ví dụ thêm: nếu không tìm thấy laptop phù hợp
+            if (laptops == null || !laptops.Any())
+            {
+                TempData["Warning"] = "Không tìm thấy laptop phù hợp với tiêu chí.";
+            }
+            else
+            {
+                TempData["Success"] = $"Tìm thấy {laptops.Count()} laptop phù hợp.";
+            }
+
             return View("Index", filter);
         }
 

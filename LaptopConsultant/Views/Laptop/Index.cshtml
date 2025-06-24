@@ -1,4 +1,6 @@
-﻿@model LaptopConsultant.ViewModels.LaptopFilterViewModel
+﻿@using Newtonsoft.Json
+
+@model LaptopConsultant.ViewModels.LaptopFilterViewModel
 @{
     ViewData["Title"] = "Tư vấn laptop";
 }
@@ -41,7 +43,7 @@
                                         new { Value = "hoc-tap", Icon = "ri-book-open-line", Label = "Học tập", Color = "from-blue-500 to-indigo-500" },
                                         new { Value = "do-hoa", Icon = "ri-brush-line", Label = "Đồ họa", Color = "from-purple-500 to-pink-500" },
                                         new { Value = "lap-trinh", Icon = "ri-code-s-slash-line", Label = "Lập trình", Color = "from-green-500 to-teal-500" },
-                                        new { Value = "van-phong", Icon = "ri-file-text-line", Label = "Văn phòng", Color = "from-orange-500 to-yellow-500" }
+                                        new { Value = "van-phong", Icon = "ri-file-text-line", Label = "Văn phòng", Color = "from-purple-500 to-pink-500" }
                                         })
                     {
                         <label class="custom-checkbox need-item cursor-pointer group tooltip" data-tooltip="Chọn @need.Label">
@@ -339,7 +341,7 @@
                                                 <i class="ri-money-dollar-circle-line text-2xl mr-2 text-blue-600"></i>
                                                 <span class="text-xl font-bold price-tag">@laptop.Price.ToString("N0") ₫</span>
                                             </div>
-                                            <div class="flex space-x-2">
+                                            <div class="df flex space-x-2">
                                                 <form asp-action="AddToCompare" asp-controller="Laptop" method="post">
                                                     <input type="hidden" name="laptopId" value="@laptop.Id" />
                                                     <button type="submit" class="w-10 h-10 text-blue-600 rounded-xl border-2 border-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center tooltip" aria-label="So sánh @laptop.Name" data-tooltip="So sánh">
@@ -387,7 +389,7 @@
                                                     Phù hợp với nhu cầu của bạn
                                                 </p>
                                                 <div class="flex items-center mt-2">
-                                                    <span class="text-sm font-bold text-blue-600">@laptop.Price.ToString("N0") ₫</span>
+                                                    <span class="text-sm font-bold text-blue-600">@laptop.Price.ToString("N0") VNĐ</span>
                                                     <div class="flex ml-2">
                                                         @for (int i = 0; i < 5; i++)
                                                         {
@@ -426,7 +428,7 @@
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-sm text-gray-600">Giá trung bình</span>
-                                    <span class="font-bold text-green-600">@((Model.Laptops.Any() ? Model.Laptops.Average(l => l.Price) : 0).ToString("N0")) ₫</span>
+                                    <span class="font-bold text-green-600">@((Model.Laptops.Any() ? Model.Laptops.Average(l => l.Price) : 0).ToString("N0")) VNĐ</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-sm text-gray-600">Đề xuất AI</span>
@@ -440,111 +442,39 @@
         }
     </div>
 </section>
-
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="~/js/dropdown.js" defer></script>
     <script src="~/js/rangeSlider.js" defer></script>
     <script src="~/js/advancedFilter.js" defer></script>
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Enhanced interactions
-        document.addEventListener('DOMContentLoaded', function() {
-            // Animate cards on scroll
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, observerOptions);
-
-            // Observe all cards
-            document.querySelectorAll('.laptop-card, .filter-section').forEach(card => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                observer.observe(card);
-            });
-
-            // Enhanced dropdown animation
-            const sortDropdown = document.getElementById('sortDropdown');
-            const sortMenu = document.getElementById('sortMenu');
-            const sortIcon = sortDropdown.querySelector('i');
-
-            sortDropdown.addEventListener('click', function() {
-                sortMenu.classList.toggle('show');
-                sortIcon.style.transform = sortMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!sortDropdown.contains(e.target)) {
-                    sortMenu.classList.remove('show');
-                    sortIcon.style.transform = 'rotate(0deg)';
-                }
-            });
-
-            // Enhanced hover effects for laptop cards
-            document.querySelectorAll('.laptop-card').forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.setProperty('--tw-shadow', '0 25px 50px -12px rgba(0, 0, 0, 0.25)');
-                });
-
-                card.addEventListener('mouseleave', function() {
-                    this.style.setProperty('--tw-shadow', '0 10px 15px -3px rgba(0, 0, 0, 0.1)');
-                });
-            });
-
-            // Smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-        });
-
-        // Advanced filter toggle with enhanced animation
-        function toggleAdvancedFilters() {
-            const content = document.getElementById('advancedFilterContent');
-            const icon = document.getElementById('advancedFilterIcon');
-            const iconElement = icon.querySelector('i');
-
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                content.style.maxHeight = '0px';
-                content.style.opacity = '0';
-                content.style.transition = 'max-height 0.5s ease, opacity 0.3s ease';
-
-                setTimeout(() => {
-                    content.style.maxHeight = content.scrollHeight + 'px';
-                    content.style.opacity = '1';
-                }, 10);
-
-                iconElement.style.transform = 'rotate(180deg)';
-                icon.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
-            } else {
-                content.style.maxHeight = '0px';
-                content.style.opacity = '0';
-
-                setTimeout(() => {
-                    content.classList.add('hidden');
-                }, 500);
-
-                iconElement.style.transform = 'rotate(0deg)';
-                icon.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        document.addEventListener('DOMContentLoaded', function () {
+            @if (TempData["Success"] != null)
+            {
+                <text>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công!',
+                           text: @Html.Raw(Json.Serialize(TempData["Success"]))
+                    });
+                </text>
             }
-        }
+
+            @if (TempData["Warning"] != null)
+            {
+                <text>
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Chú ý!',
+                                text: @Html.Raw(Json.Serialize(TempData["Warning"]))
+
+                    });
+                </text>
+            }
+
+    
+        });
     </script>
 }

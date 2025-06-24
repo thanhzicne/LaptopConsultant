@@ -113,10 +113,12 @@
         }
 
     .laptop-image {
-        height: 200px;
-        object-fit: cover;
-        transition: transform 0.4s ease;
-    }
+    width: 100%;
+    height: 200px;          /* Cố định chiều cao */
+    object-fit: cover;      /* Cắt ảnh để vừa vùng chứa */
+    transition: transform 0.4s ease;
+}
+
 
     .laptop-card:hover .laptop-image {
         transform: scale(1.05);
@@ -330,6 +332,52 @@
     .laptop-card:nth-child(6) {
         animation-delay: 0.6s;
     }
+    /* Pagination Styles */
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 40px;
+        padding: 20px 0;
+    }
+
+    .pagination-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 40px;
+        text-align: center;
+    }
+
+        .pagination-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .pagination-btn:disabled {
+            background: #718096;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .pagination-btn.active {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            transform: scale(1.1);
+        }
+        .pagination-btn:disabled {
+    background: transparent;
+    color: #999;
+    cursor: default;
+    box-shadow: none;
+}
+
 </style>
 
 <!-- Hero Section -->
@@ -376,7 +424,7 @@
         <!-- Laptop Grid -->
         @if (Model.Laptops.Any())
         {
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 grid-container animate-slide-up">
+            <div id="laptop-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 grid-container animate-slide-up">
                 @foreach (var laptop in Model.Laptops)
                 {
                     <div class="laptop-card animate-fade-in">
@@ -422,6 +470,8 @@
                     </div>
                 }
             </div>
+            <div id="pagination" class="pagination-container"></div>
+
         }
         else
         {
@@ -498,3 +548,119 @@
         </div>
     </div>
 </div>
+<!-- Pagination JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const laptopsPerPage = 12;
+        const laptopGrid = document.getElementById('laptop-grid');
+        const paginationContainer = document.getElementById('pagination');
+        const laptops = laptopGrid.querySelectorAll('.laptop-card');
+        const totalLaptops = laptops.length;
+        const totalPages = Math.ceil(totalLaptops / laptopsPerPage);
+        let currentPage = 1;
+
+        function showPage(page) {
+            // Ẩn toàn bộ laptop
+            laptops.forEach((laptop) => {
+                laptop.style.display = 'none';
+            });
+
+            // Hiển thị các laptop cho trang hiện tại
+            const start = (page - 1) * laptopsPerPage;
+            const end = Math.min(start + laptopsPerPage, totalLaptops);
+            for (let i = start; i < end; i++) {
+                laptops[i].style.display = 'block';
+            }
+
+            // Cập nhật các nút phân trang
+            updatePaginationButtons(page);
+        }
+
+        function updatePaginationButtons(page) {
+            paginationContainer.innerHTML = '';
+
+            // Nút Prev
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'pagination-btn';
+            prevBtn.innerHTML = '←';
+            prevBtn.disabled = page === 1;
+            prevBtn.addEventListener('click', () => {
+                if (page > 1) {
+                    currentPage--;
+                    showPage(currentPage);
+                }
+            });
+            paginationContainer.appendChild(prevBtn);
+
+            // Hiển thị nút 1, 2, 3
+            for (let i = 1; i <= 3 && i <= totalPages; i++) {
+                createPageButton(i, page);
+            }
+
+            // Dấu "..." nếu cần
+            if (page > 5 && totalPages > 6) {
+                addEllipsis();
+            }
+
+            // Hiển thị nút xung quanh trang hiện tại nếu nó ở giữa
+            if (page > 3 && page < totalPages - 2) {
+                for (let i = page - 1; i <= page + 1; i++) {
+                    if (i > 3 && i < totalPages - 2) {
+                        createPageButton(i, page);
+                    }
+                }
+            }
+
+            // Dấu "..." ở cuối nếu cần
+            if (page < totalPages - 4 && totalPages > 6) {
+                addEllipsis();
+            }
+
+            // Hiển thị 3 trang cuối
+            for (let i = totalPages - 2; i <= totalPages; i++) {
+                if (i > 3) {
+                    createPageButton(i, page);
+                }
+            }
+
+            // Nút Next
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'pagination-btn';
+            nextBtn.innerHTML = '→';
+            nextBtn.disabled = page === totalPages;
+            nextBtn.addEventListener('click', () => {
+                if (page < totalPages) {
+                    currentPage++;
+                    showPage(currentPage);
+                }
+            });
+            paginationContainer.appendChild(nextBtn);
+        }
+
+        function createPageButton(i, currentPage) {
+            if (i >= 1 && i <= totalPages) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+                pageBtn.innerHTML = i;
+                pageBtn.addEventListener('click', () => {
+                    currentPage = i;
+                    showPage(currentPage);
+                });
+                paginationContainer.appendChild(pageBtn);
+            }
+        }
+
+        function addEllipsis() {
+            const dots = document.createElement('span');
+            dots.className = 'pagination-btn';
+            dots.innerHTML = '...';
+            dots.style.cursor = 'default';
+            paginationContainer.appendChild(dots);
+        }
+
+        // Khởi tạo trang đầu tiên
+        if (totalLaptops > 0) {
+            showPage(currentPage);
+        }
+    });
+</script>
