@@ -216,10 +216,12 @@
 
             <!-- Search Form -->
             <div class="header-search-container">
-                <form asp-controller="Laptop" asp-action="Search" class="header-search-form" method="get">
-                    <input type="text" name="query" class="header-search-input" placeholder="Tìm kiếm laptop..." />
-                    <button type="submit" class="header-search-btn">
-                        <i class="fas fa-search"></i><span>Tìm</span>
+
+                <form asp-controller="Laptop" asp-action="SelectForCompare" method="get" class="flex flex-col sm:flex-row gap-4 header-search-form">
+                    <input type="text" name="searchTerm" placeholder="🔍 Tìm kiếm laptop theo tên, thương hiệu..."
+                           class="search-input flex-1 header-search-input" value="@ViewBag.SearchTerm">
+                    <button type="submit" class="search-btn header-search-btn">
+                        Tìm kiếm
                     </button>
                 </form>
             </div>
