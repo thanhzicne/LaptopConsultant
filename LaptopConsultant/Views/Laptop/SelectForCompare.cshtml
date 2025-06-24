@@ -3,45 +3,420 @@
     ViewData["Title"] = "Chọn laptop để so sánh";
     var compareList = ViewBag.CompareList as List<int> ?? new List<int>();
 }
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css" rel="stylesheet" />
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-in-out;
+    }
 
-<section class="py-12 bg-gray-50">
-    <div class="container mx-auto px-4">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center animate-fade-in">Chọn laptop để so sánh</h2>
-        <div class="mb-4 text-center">
-            <form asp-action="SelectForCompare" method="get" class="inline-flex max-w-md w-full">
-                <input type="text" name="searchTerm" placeholder="Tìm kiếm laptop..." class="border border-gray-300 rounded-l-md px-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary">
-                <button type="submit" class="bg-primary text-white px-4 py-2 rounded-r-md hover:bg-blue-600 text-sm">Tìm kiếm</button>
+    .animate-slide-up {
+        animation: slideUp 0.6s ease-out;
+    }
+
+    .animate-bounce-in {
+        animation: bounceIn 0.6s ease-out;
+    }
+
+   
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 60px 0;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="1" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+    .search-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .search-input {
+        border: 2px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 15px 20px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+    .search-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 15px;
+        padding: 15px 25px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        transform: translateY(0);
+    }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+    .laptop-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+        border: 2px solid transparent;
+        position: relative;
+    }
+
+        .laptop-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .laptop-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .laptop-card:hover::before {
+            transform: scaleX(1);
+        }
+
+    .laptop-image {
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .laptop-card:hover .laptop-image {
+        transform: scale(1.05);
+    }
+
+    .laptop-info {
+        padding: 25px;
+    }
+
+    .laptop-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 12px;
+        line-height: 1.4;
+    }
+
+    .laptop-specs {
+        background: #f7fafc;
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        color: #4a5568;
+        margin-bottom: 16px;
+        border-left: 4px solid #667eea;
+    }
+
+    .price-tag {
+        font-size: 1.4rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 15px;
+    }
+
+    .add-btn {
+        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .add-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .add-btn:hover::before {
+            left: 100%;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+        }
+
+    .compare-bar {
+        background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .compare-slot {
+        background: #4a5568;
+        border: 2px dashed #718096;
+        border-radius: 15px;
+        padding: 15px 20px;
+        color: #a0aec0;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        min-width: 140px;
+        text-align: center;
+    }
+
+        .compare-slot.filled {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 2px solid #667eea;
+            color: white;
+            animation: pulse 0.5s ease-in-out;
+        }
+
+            .compare-slot.filled:hover {
+                transform: scale(1.05);
+            }
+
+    .remove-btn {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #e53e3e;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(229, 62, 62, 0.4);
+    }
+
+        .remove-btn:hover {
+            transform: scale(1.1);
+            background: #c53030;
+        }
+
+    .compare-now-btn {
+        background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .compare-now-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(229, 62, 62, 0.4);
+        }
+
+        .compare-now-btn:disabled {
+            background: #718096;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+    .alert {
+        padding: 15px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        text-align: center;
+        animation: slideDown 0.5s ease-out;
+    }
+
+    .alert-warning {
+        background: #fef5e7;
+        color: #d69e2e;
+        border-left: 4px solid #f6ad55;
+    }
+
+    .alert-error {
+        background: #fed7d7;
+        color: #e53e3e;
+        border-left: 4px solid #fc8181;
+    }
+
+   
+
+    .no-results {
+        text-align: center;
+        padding: 60px 20px;
+        color: #718096;
+    }
+
+    .no-results-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        opacity: 0.5;
+    }
+
+    .grid-container {
+        animation-delay: 0.2s;
+    }
+
+    .laptop-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .laptop-card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .laptop-card:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .laptop-card:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    .laptop-card:nth-child(5) {
+        animation-delay: 0.5s;
+    }
+
+    .laptop-card:nth-child(6) {
+        animation-delay: 0.6s;
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container mx-auto px-4 relative z-10">
+        <h1 class="text-4xl md:text-5xl font-bold text-white text-center mb-4 animate-fade-in">
+            So sánh Laptop
+        </h1>
+        <p class="text-xl text-white text-center opacity-90 mb-8 animate-slide-up">
+            Chọn tối đa 3 laptop để so sánh chi tiết cấu hình và giá cả
+        </p>
+
+        <!-- Search Container -->
+        <div class="search-container animate-bounce-in">
+            <form asp-action="SelectForCompare" method="get" class="flex flex-col sm:flex-row gap-4">
+                <input type="text" name="searchTerm" placeholder="🔍 Tìm kiếm laptop theo tên, thương hiệu..."
+                       class="search-input flex-1" value="@ViewBag.SearchTerm">
+                <button type="submit" class="search-btn">
+                    Tìm kiếm
+                </button>
             </form>
         </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<section class="py-12 bg-gradient-to-br from-gray-50 to-white" style="padding-bottom: 120px;">
+    <div class="container mx-auto px-4">
+
+        <!-- Alerts -->
         @if (TempData["Warning"] != null)
         {
-            <div class="text-center text-yellow-600 text-sm mb-3">@TempData["Warning"]</div>
+            <div class="alert alert-warning">
+                ⚠️ @TempData["Warning"]
+            </div>
         }
         @if (TempData["Error"] != null)
         {
-            <div class="text-center text-red-600 text-sm mb-3">@TempData["Error"]</div>
+            <div class="alert alert-error">
+                ❌ @TempData["Error"]
+            </div>
         }
+
+        <!-- Laptop Grid -->
         @if (Model.Laptops.Any())
         {
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 grid-container animate-slide-up">
                 @foreach (var laptop in Model.Laptops)
                 {
-                    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden transform transition-transform hover:-translate-y-1 hover:shadow-lg">
-                        <div class="relative">
-                            <img src="@laptop.ImageUrl" alt="@laptop.Name" class="w-full h-40 object-cover object-top">
+                    <div class="laptop-card animate-fade-in">
+                        <div class="relative overflow-hidden">
+                            <img src="@laptop.ImageUrl" alt="@laptop.Name" class="laptop-image w-full">
+                            <div class="absolute top-4 right-4 bg-white bg-opacity-90 backdrop-filter backdrop-blur-sm rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+                                @laptop.Brand
+                            </div>
                         </div>
-                        <div class="p-4">
-                            <h4 class="text-base font-semibold text-gray-900 mb-2">@laptop.Name</h4>
-                            <div class="flex items-center mb-2">
-                                <span class="text-xs text-gray-600">@laptop.CPU, @laptop.RAM, @laptop.Storage</span>
+
+                        <div class="laptop-info">
+                            <h4 class="laptop-title">@laptop.Name</h4>
+
+                            <div class="laptop-specs">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-xs">💻</span>
+                                    <span>@laptop.CPU</span>
+                                </div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-xs">🧠</span>
+                                    <span>@laptop.RAM</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs">💾</span>
+                                    <span>@laptop.Storage</span>
+                                </div>
                             </div>
+
                             <div class="flex items-center justify-between">
-                                <span class="text-base font-bold text-primary">@laptop.Price.ToString("N0") ₫</span>
-                                <form asp-action="AddToCompare" asp-controller="Laptop" method="post">
-                                    <input type="hidden" name="laptopId" value="@laptop.Id" />
-                                    <button type="submit" class="btn-primary bg-primary text-white px-3 py-1.5 rounded-md hover:bg-blue-600 text-sm">Thêm vào so sánh</button>
-                                </form>
+                                <div class="price-tag">
+                                    @laptop.Price.ToString("N0") ₫
+                                </div>
                             </div>
+
+                            <form asp-action="AddToCompare" asp-controller="Laptop" method="post">
+                                <input type="hidden" name="laptopId" value="@laptop.Id" />
+                                <button type="submit" class="add-btn">
+                                    <span class="relative z-10">➕ Thêm vào so sánh</span>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 }
@@ -49,44 +424,76 @@
         }
         else
         {
-            <p class="text-center text-gray-600 text-sm">Không tìm thấy laptop nào.</p>
+            <div class="no-results animate-fade-in">
+                <svg class="no-results-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.034 0-3.9.785-5.291 2.09A8.001 8.001 0 0112 3a8.001 8.001 0 015.291 10.09z"></path>
+                </svg>
+                <h3 class="text-2xl font-bold mb-2">Không tìm thấy laptop nào</h3>
+                <p class="text-lg">Thử tìm kiếm với từ khóa khác hoặc xóa bộ lọc</p>
+            </div>
         }
     </div>
 </section>
 
-<!-- Thanh cố định -->
-<div class="fixed bottom-0 left-0 w-full bg-gray-900 text-white p-3 z-50 shadow-md">
-    <div class="flex justify-center items-center space-x-3">
-        @for (int i = 0; i < 3; i++)
-        {
-            var selectedLaptopId = compareList.Count > i ? compareList[i] : 0;
-            var isSelected = compareList.Contains(selectedLaptopId);
-            if (isSelected)
-            {
-                <div class="relative bg-blue-600 text-white px-4 py-2 rounded-md">
-                    Sản phẩm @(i + 1)
-                    <form asp-action="RemoveFromCompare" asp-controller="Laptop" method="post" class="absolute top-0 right-0 mt-1 mr-1">
-                        <input type="hidden" name="laptopId" value="@selectedLaptopId" />
-                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm">×</button>
+<!-- Fixed Compare Bar -->
+<div class="fixed bottom-0 left-0 w-full compare-bar p-4 z-50">
+    <div class="container mx-auto">
+        <div class="flex flex-wrap justify-center items-center gap-4">
+
+            <!-- Compare Slots -->
+            <div class="flex gap-3">
+                @for (int i = 0; i < 3; i++)
+                {
+                    var selectedLaptopId = compareList.Count > i ? compareList[i] : 0;
+                    var isSelected = selectedLaptopId > 0 && compareList.Contains(selectedLaptopId);
+
+                    if (isSelected)
+                    {
+                        <div class="compare-slot filled">
+                            <span>Laptop @(i + 1)</span>
+                            <form asp-action="RemoveFromCompare" asp-controller="Laptop" method="post" class="inline">
+                                <input type="hidden" name="laptopId" value="@selectedLaptopId" />
+                                <button type="submit" class="remove-btn" title="Xóa khỏi so sánh">×</button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="compare-slot" data-slot="@(i + 1)">
+                            <span>Laptop @(i + 1)</span>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- Compare Button -->
+            <div class="ml-4">
+                @if (compareList.Count >= 2)
+                {
+                    <form asp-action="CompareNow" asp-controller="Laptop" method="post" class="inline">
+                        <button type="submit" class="compare-now-btn">
+                            🔄 So sánh ngay (@compareList.Count)
+                        </button>
                     </form>
-                </div>
-            }
-            else
-            {
-                <div class="bg-gray-700 text-gray-400 px-4 py-2 rounded-md cursor-not-allowed" data-slot="@(i + 1)">
-                    Sản phẩm @(i + 1)
-                </div>
-            }
-        }
-        @if (compareList.Count >= 2)
-        {
-            <form asp-action="CompareNow" asp-controller="Laptop" method="post" class="ml-3">
-                <button type="submit" class="btn-danger btn-danger text-white px-4 py-2 rounded-md hover:bg-blue-600 text-sm">So sánh ngay</button>
-            </form>
-        }
-        else
-        {
-            <button class="bg-gray-500 text-gray-300 px-4 py-2 rounded-md cursor-not-allowed text-sm" disabled>So sánh ngay</button>
-        }
+                }
+                else
+                {
+                    <button class="compare-now-btn" disabled>
+                        🔄 Chọn ít nhất 2 laptop
+                    </button>
+                }
+            </div>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="mt-3">
+            <div class="bg-gray-700 rounded-full h-2 max-w-md mx-auto">
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500 ease-out"
+                     style="width: @(compareList.Count * 33.33)%"></div>
+            </div>
+            <p class="text-center text-sm text-gray-400 mt-2">
+                @compareList.Count / 3 laptop đã chọn
+            </p>
+        </div>
     </div>
 </div>

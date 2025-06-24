@@ -1,97 +1,242 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thống kê xu hướng</title>
+    <title>Thống kê xu hướng laptop</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f7fa;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: -2;
+        }
+
+            .animated-bg::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+                animation: float 20s ease-in-out infinite;
+            }
+
+        
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        h2 {
+        .header {
             text-align: center;
-            font-size: 2rem;
-            font-weight: bold;
-            color: #333;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+            .header h1 {
+                font-size: 3.5rem;
+                font-weight: 800;
+                background: linear-gradient(135deg, #fff, #f8f9ff);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                margin-bottom: 1rem;
+                text-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+
+            .header p {
+                font-size: 1.2rem;
+                color: rgba(255, 255, 255, 0.9);
+                max-width: 600px;
+                margin: 0 auto;
+                line-height: 1.6;
+            }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(580px, 1fr));
+            gap: 30px;
             margin-bottom: 2rem;
         }
+
+        .chart-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.6s ease-out;
+        }
+
+            .chart-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
+                background-size: 200% 100%;
+                animation: shimmer 3s ease-in-out infinite;
+            }
+
+        
+        .chart-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 32px 64px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.3);
+        }
+
+        .chart-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+            .chart-card h3::before {
+                content: '';
+                width: 8px;
+                height: 8px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                border-radius: 50%;
+                box-shadow: 0 0 12px rgba(102, 126, 234, 0.4);
+            }
 
         .chart-container {
-            background: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            height: 320px;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .legend {
             display: flex;
-            justify-content: flex-end;
-            margin-top: 10px;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 16px;
+            flex-wrap: wrap;
         }
 
-            .legend span {
-                margin-left: 10px;
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+            .legend-item:hover {
+                background: rgba(255, 255, 255, 1);
+                transform: scale(1.05);
             }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+        }
+
+        .feature-highlight {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+   
     </style>
 </head>
 <body>
-    <section class="py-16">
-        <h2>Thống kê xu hướng</h2>
-        <div class="container">
-            <p class="text-center mb-4">Xem các xu hướng tìm kiếm và lựa chọn laptop phổ biến trong thời gian qua.</p>
-            <div class="grid">
-                <div class="chart-container">
-                    <h3>Top 5 nhu cầu phổ biến</h3>
-                    <div id="needsChart" style="height: 300px;"></div>
-                </div>
-                <div class="chart-container">
-                    <h3>Top 5 laptop được chọn</h3>
-                    <div id="laptopsChart" style="height: 300px;"></div>
-                </div>
+    <div class="animated-bg"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>📊 Thống kê xu hướng Laptop</h1>
+            <p>Khám phá các xu hướng tìm kiếm và lựa chọn laptop phổ biến nhất trong thời gian qua với dữ liệu trực quan và chi tiết</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="chart-card">
+                <div class="feature-highlight">🔥 Hot</div>
+                <h3>🎯 Top 5 nhu cầu phổ biến</h3>
+                <div id="needsChart" class="chart-container"></div>
             </div>
-            <div class="grid">
-                <div class="chart-container">
-                    <h3>Thương hiệu phổ biến</h3>
-                    <div id="brandsChart" style="height: 300px;"></div>
-                </div>
-                <div class="chart-container">
-                    <h3>Xu hướng tìm kiếm theo thời gian</h3>
-                    <div id="trendsChart" style="height: 300px;"></div>
-                    <div class="legend">
-                        <span style="color: #1E90FF;">Gaming</span>
-                        <span style="color: #32CD32;">Học tập</span>
-                        <span style="color: #FFA500;">Văn phòng</span>
+
+            <div class="chart-card">
+                <div class="feature-highlight">⭐ Best</div>
+                <h3>💻 Top 5 laptop được chọn</h3>
+                <div id="laptopsChart" class="chart-container"></div>
+            </div>
+
+            <div class="chart-card">
+                <div class="feature-highlight">📈 Trend</div>
+                <h3>🏢 Thương hiệu phổ biến</h3>
+                <div id="brandsChart" class="chart-container"></div>
+            </div>
+
+            <div class="chart-card">
+                <div class="feature-highlight">📊 Live</div>
+                <h3>📅 Xu hướng tìm kiếm theo thời gian</h3>
+                <div id="trendsChart" class="chart-container"></div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #667eea;"></div>
+                        <span>🎮 Gaming</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #48bb78;"></div>
+                        <span>📚 Học tập</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #ed8936;"></div>
+                        <span>💼 Văn phòng</span>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
     <script>
         // Khởi tạo các biểu đồ
         const needsChart = echarts.init(document.getElementById('needsChart'));
@@ -136,7 +281,6 @@
         });
 
         laptopsChart.setOption({
-           
             tooltip: {},
             xAxis: { type: 'category', data: Object.keys(laptopsData) },
             yAxis: { type: 'value' },
@@ -144,7 +288,6 @@
         });
 
         brandsChart.setOption({
-           
             tooltip: { trigger: 'item' },
             series: [{
                 type: 'pie',
@@ -160,15 +303,14 @@
         });
 
         trendsChart.setOption({
-            
             tooltip: { trigger: 'axis' },
             legend: { data: ['Gaming', 'Học tập', 'Văn phòng'], right: 0 },
             xAxis: { type: 'category', data: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'] },
             yAxis: { type: 'value' },
             series: [
-                { name: 'Gaming', type: 'line', data: trendsData['Gaming'], itemStyle: { color: '#1E90FF' } },
-                { name: 'Học tập', type: 'line', data: trendsData['Học tập'], itemStyle: { color: '#32CD32' } },
-                { name: 'Văn phòng', type: 'line', data: trendsData['Văn phòng'], itemStyle: { color: '#FFA500' } }
+                { name: 'Gaming', type: 'line', data: trendsData['Gaming'], itemStyle: { color: '#667eea' } },
+                { name: 'Học tập', type: 'line', data: trendsData['Học tập'], itemStyle: { color: '#48bb78' } },
+                { name: 'Văn phòng', type: 'line', data: trendsData['Văn phòng'], itemStyle: { color: '#ed8936' } }
             ]
         });
 

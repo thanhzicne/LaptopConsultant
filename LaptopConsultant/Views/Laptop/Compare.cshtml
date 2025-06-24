@@ -4,105 +4,586 @@
     bool showDifferencesOnly = ViewBag.ShowDifferencesOnly != null && (bool)ViewBag.ShowDifferencesOnly;
 }
 
-<section class="py-16">
-    <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">So sánh laptop</h2>
-    @if (TempData["Warning"] != null)
-    {
-        <div class="text-center text-yellow-600 mb-4">@TempData["Warning"]</div>
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-in-out;
     }
-    @if (TempData["Error"] != null)
-    {
-        <div class="text-center text-red-600 mb-4">@TempData["Error"]</div>
+    
+    .animate-slide-up {
+        animation: slideUp 0.6s ease-out;
     }
-    <div class="mb-6 text-center">
-        <a asp-action="CompareLaptops" asp-route-showDifferencesOnly="true" class=" bg-primary text-dark px-4 py-2 rounded-lg hover:bg-blue-600 mr-2">Chỉ xem điểm khác biệt</a>
-        <a asp-action="CompareLaptops" asp-route-showDifferencesOnly="false" class="bg-white text-primary px-4 py-2 rounded-lg border border-primary hover:bg-blue-50">Xem tất cả</a>
+    
+    .animate-slide-in {
+        animation: slideIn 0.6s ease-out;
+    }
+    
+   
+    
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 60px 0;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.2"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+    }
+    
+    .filter-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .filter-btn {
+        padding: 12px 25px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .filter-btn.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    .filter-btn.inactive {
+        background: white;
+        color: #667eea;
+        border-color: #667eea;
+    }
+    
+    .filter-btn.inactive:hover {
+        background: #f7fafc;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    }
+    
+    .compare-container {
+        background: white;
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e2e8f0;
+    }
+    
+    .laptop-header {
+        background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+        padding: 30px 20px;
+        text-align: center;
+        border-bottom: 3px solid #667eea;
+        position: relative;
+    }
+    
+    .laptop-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .laptop-image {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 15px;
+        margin: 0 auto 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+    }
+    
+    .laptop-image:hover {
+        transform: scale(1.05);
+    }
+    
+    .laptop-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 8px;
+        line-height: 1.4;
+    }
+    
+    .laptop-brand {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+    
+    .spec-row {
+        display: grid;
+        grid-template-columns: 200px repeat(auto-fit, minmax(250px, 1fr));
+        gap: 0;
+        border-bottom: 1px solid #e2e8f0;
+        transition: background-color 0.3s ease;
+    }
+    
+    .spec-row:hover {
+        background: #f8fafc;
+    }
+    
+    .spec-row:nth-child(even) {
+        background: #fafafa;
+    }
+    
+    .spec-row:nth-child(even):hover {
+        background: #f0f4f8;
+    }
+    
+    .spec-label {
+        padding: 20px;
+        font-weight: 700;
+        color: #4a5568;
+        background: #f7fafc;
+        border-right: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.95rem;
+    }
+    
+    .spec-value {
+        padding: 20px;
+        color: #2d3748;
+        border-right: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-weight: 500;
+        min-height: 60px;
+    }
+    
+    .spec-value:last-child {
+        border-right: none;
+    }
+    
+    .price-cell {
+        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        color: white;
+        font-weight: 800;
+        font-size: 1.1rem;
+    }
+    
+    .price-cell:hover {
+        background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    }
+    
+    .difference-highlight {
+        background: linear-gradient(135deg, #fef5e7 0%, #fed7aa 100%);
+        border-left: 4px solid #f6ad55;
+        font-weight: 600;
+        position: relative;
+    }
+    
+    .difference-highlight::before {
+        content: '⚡';
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.2rem;
+    }
+    
+    .difference-highlight .spec-value {
+        padding-left: 35px;
+    }
+    
+    .action-buttons {
+        background: #f8fafc;
+        padding: 30px;
+        text-align: center;
+        border-top: 1px solid #e2e8f0;
+    }
+    
+    .remove-btn {
+        background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .remove-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(229, 62, 62, 0.4);
+    }
+    
+    .add-more-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        padding: 15px 30px;
+        border-radius: 15px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+    }
+    
+    .add-more-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        text-decoration: none;
+        color: white;
+    }
+    
+    .no-laptops {
+        text-align: center;
+        padding: 80px 20px;
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    }
+    
+    .no-laptops-icon {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 25px;
+        opacity: 0.6;
+    }
+    
+    .alert {
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        font-weight: 600;
+        text-align: center;
+        animation: slideDown 0.5s ease-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .alert-warning {
+        background: linear-gradient(135deg, #fef5e7 0%, #fed7aa 100%);
+        color: #d69e2e;
+        border: 1px solid #f6ad55;
+    }
+    
+    .alert-error {
+        background: linear-gradient(135deg, #fed7d7 0%, #fca5a5 100%);
+        color: #e53e3e;
+        border: 1px solid #fc8181;
+    }
+    
+   
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e2e8f0;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+    }
+    
+    .stat-label {
+        color: #718096;
+        font-weight: 600;
+        margin-top: 8px;
+    }
+    
+    
+    .mobile-card {
+        display: none;
+    }
+  
+    
+</style>
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container mx-auto px-4 relative z-10">
+        <h1 class="text-4xl md:text-5xl font-bold text-white text-center mb-4 animate-fade-in">
+            Kết quả so sánh
+        </h1>
+        <p class="text-xl text-white text-center opacity-90 mb-8 animate-slide-up">
+            So sánh chi tiết các laptop đã chọn
+        </p>
+        
+        <!-- Filter Container -->
+        <div class="filter-container animate-slide-up">
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a asp-action="CompareLaptops" asp-route-showDifferencesOnly="true" 
+                   class="filter-btn @(showDifferencesOnly ? "active" : "inactive")">
+                    <span>🔍</span>
+                    Chỉ xem điểm khác biệt
+                </a>
+                <a asp-action="CompareLaptops" asp-route-showDifferencesOnly="false" 
+                   class="filter-btn @(!showDifferencesOnly ? "active" : "inactive")">
+                    <span>📋</span>
+                    Xem tất cả thông số
+                </a>
+            </div>
+        </div>
     </div>
-    @if (Model.Laptops.Any())
-    {
-        <div id="compareTable" class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-200">
-                <thead>
-                    <tr>
-                        <th class="px-4 py-2"></th>
+</div>
+
+<!-- Main Content -->
+<section class="py-12 bg-gradient-to-br from-gray-50 to-white">
+    <div class="container mx-auto px-4">
+        
+        <!-- Alerts -->
+        @if (TempData["Warning"] != null)
+        {
+            <div class="alert alert-warning">
+                <span>⚠️</span>
+                @TempData["Warning"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-error">
+                <span>❌</span>
+                @TempData["Error"]
+            </div>
+        }
+        
+        @if (Model.Laptops.Any())
+        {
+            <!-- Statistics -->
+            <div class="stats-container animate-fade-in">
+                <div class="stat-card">
+                    <div class="stat-number">@Model.Laptops.Count()</div>
+                    <div class="stat-label">Laptop đang so sánh</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">@Model.Laptops.Min(l => l.Price).ToString("N0")</div>
+                    <div class="stat-label">Giá thấp nhất (₫)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">@Model.Laptops.Max(l => l.Price).ToString("N0")</div>
+                    <div class="stat-label">Giá cao nhất (₫)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">@Model.Laptops.Select(l => l.Brand).Distinct().Count()</div>
+                    <div class="stat-label">Thương hiệu</div>
+                </div>
+            </div>
+            
+            <!-- Desktop Table -->
+            <div class="compare-container animate-slide-up desktop-table">
+                <!-- Laptop Headers -->
+                <div class="spec-row">
+                    <div class="spec-label">
+                        <span>💻</span>
+                        Laptop
+                    </div>
+                    @foreach (var laptop in Model.Laptops)
+                    {
+                        <div class="laptop-header">
+                            <img src="@laptop.ImageUrl" alt="@laptop.Name" class="laptop-image">
+                            <h3 class="laptop-name">@laptop.Name</h3>
+                            <span class="laptop-brand">@laptop.Brand</span>
+                        </div>
+                    }
+                </div>
+                
+                <!-- Specifications -->
+                @{
+                    var specs = new Dictionary<string, Func<LaptopConsultant.Models.Laptop, string>>
+                    {
+                        {"🖥️ Thương hiệu", l => l.Brand},
+                        {"⚡ CPU", l => l.CPU},
+                        {"🧠 RAM", l => l.RAM},
+                        {"💾 Storage", l => l.Storage},
+                        {"📺 Màn hình", l => l.Screen},
+                        {"🎮 GPU", l => l.GPU},
+                        {"⚖️ Trọng lượng", l => l.Weight},
+                        {"🖱️ Hệ điều hành", l => l.OS}
+                    };
+                }
+                
+                @foreach (var spec in specs)
+                {
+                    
+                        var values = Model.Laptops.Select(spec.Value).ToList();
+                        var hasDifference = values.Distinct().Count() > 1;
+                        var shouldShow = !showDifferencesOnly || hasDifference;
+                    
+                    
+                    @if (shouldShow)
+                    {
+                        <div class="spec-row @(hasDifference ? "difference-highlight" : "")">
+                            <div class="spec-label">
+                                @spec.Key
+                            </div>
+                            @foreach (var laptop in Model.Laptops)
+                            {
+                                <div class="spec-value">
+                                    @spec.Value(laptop)
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+                
+                <!-- Price Row -->
+                @{
+                    var prices = Model.Laptops.Select(l => l.Price).ToList();
+                    var priceHasDifference = prices.Distinct().Count() > 1;
+                    var priceShowShow = !showDifferencesOnly || priceHasDifference;
+                }
+                
+                @if (priceShowShow)
+                {
+                    <div class="spec-row @(priceHasDifference ? "difference-highlight" : "")">
+                        <div class="spec-label">
+                            <span>💰</span>
+                            Giá bán
+                        </div>
                         @foreach (var laptop in Model.Laptops)
                         {
-                            <th class="px-4 py-2 text-center">@laptop.Name</th>
+                            <div class="spec-value price-cell">
+                                @laptop.Price.ToString("N0") ₫
+                            </div>
                         }
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="px-4 py-2 font-medium">Hình ảnh</td>
+                    </div>
+                }
+                
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <h4 class="text-lg font-bold text-gray-700 mb-4">Quản lý so sánh</h4>
+                    <div class="flex flex-wrap justify-center gap-3">
                         @foreach (var laptop in Model.Laptops)
                         {
-                            <td class="px-4 py-2"><img src="@laptop.ImageUrl" alt="@laptop.Name" class="w-24 h-24 object-cover mx-auto"></td>
+                            <form asp-action="RemoveFromCompare" asp-controller="Laptop" method="post" class="inline">
+                                <input type="hidden" name="laptopId" value="@laptop.Id" />
+                                <button type="submit" class="remove-btn">
+                                    <span>🗑️</span>
+                                    Xóa @laptop.Name
+                                </button>
+                            </form>
                         }
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-2 font-medium">Thương hiệu</td>
-                        @foreach (var laptop in Model.Laptops)
+                    </div>
+                    <a asp-action="SelectForCompare" class="add-more-btn">
+                        <span>➕</span>
+                        Thêm laptop khác
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Mobile Cards -->
+            <div class="mobile-card">
+                @foreach (var laptop in Model.Laptops)
+                {
+                    <div class="mobile-laptop-card animate-fade-in">
+                        <div class="text-center mb-6">
+                            <img src="@laptop.ImageUrl" alt="@laptop.Name" class="laptop-image">
+                            <h3 class="laptop-name">@laptop.Name</h3>
+                            <span class="laptop-brand">@laptop.Brand</span>
+                        </div>
+                        
+                        @foreach (var spec in specs)
                         {
-                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.Brand == laptop.Brand) ? "" : laptop.Brand)</td>
+                           
+                                var values = Model.Laptops.Select(spec.Value).ToList();
+                                var hasDifference = values.Distinct().Count() > 1;
+                                var shouldShow = !showDifferencesOnly || hasDifference;
+                            
+                            
+                            @if (shouldShow)
+                            {
+                                <div class="mobile-spec-item">
+                                    <div class="mobile-spec-label">@spec.Key</div>
+                                    <div class="mobile-spec-value">@spec.Value(laptop)</div>
+                                </div>
+                            }
                         }
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-2 font-medium">CPU</td>
-                        @foreach (var laptop in Model.Laptops)
+                        
+                        @if (priceShowShow)
                         {
-                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.CPU == laptop.CPU) ? "" : laptop.CPU)</td>
+                            <div class="mobile-spec-item">
+                                <div class="mobile-spec-label">💰 Giá bán</div>
+                                <div class="mobile-spec-value font-bold text-green-600">@laptop.Price.ToString("N0") ₫</div>
+                            </div>
                         }
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-2 font-medium">RAM</td>
-                        @foreach (var laptop in Model.Laptops)
-                        {
-                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.RAM == laptop.RAM) ? "" : laptop.RAM)</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-2 font-medium">Storage</td>
-                        @foreach (var laptop in Model.Laptops)
-                        {
-                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.Storage == laptop.Storage) ? "" : laptop.Storage)</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-2 font-medium">Screen</td>
-                        @foreach (var laptop in Model.Laptops)
-                        {
-                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.Screen == laptop.Screen) ? "" : laptop.Screen)</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-2 font-medium">GPU</td>
-                        @foreach (var laptop in Model.Laptops)
-                        {
-                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.GPU == laptop.GPU) ? "" : laptop.GPU)</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-2 font-medium">Giá</td>
-                        @foreach (var laptop in Model.Laptops)
-                        {
-                            <td class="px-4 py-2 text-center">@(showDifferencesOnly && Model.Laptops.All(l => l.Price == laptop.Price) ? "" : laptop.Price.ToString("N0") + " ₫")</td>
-                        }
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="mt-6 text-center">
-            @foreach (var laptop in Model.Laptops)
-            {
-                <form asp-action="RemoveFromCompare" asp-controller="Laptop" method="post" class="inline-block mr-2">
-                    <input type="hidden" name="laptopId" value="@laptop.Id" />
-                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Xóa</button>
-                </form>
-            }
-        </div>
-    }
-    else
-    {
-        <p class="text-center text-gray-600">Chưa có laptop nào được chọn để so sánh. <a asp-action="SelectForCompare" class="text-primary">Chọn ngay</a></p>
-    }
+                        
+                        <div class="mt-6 text-center">
+                            <form asp-action="RemoveFromCompare" asp-controller="Laptop" method="post" class="inline">
+                                <input type="hidden" name="laptopId" value="@laptop.Id" />
+                                <button type="submit" class="remove-btn">
+                                    <span>🗑️</span>
+                                    Xóa khỏi so sánh
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                
+                <div class="text-center mt-6">
+                    <a asp-action="SelectForCompare" class="add-more-btn">
+                        <span>➕</span>
+                        Thêm laptop khác
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="no-laptops animate-fade-in">
+                <svg class="no-laptops-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h2a2 2 0 002-2z"></path>
+                </svg>
+                <h3 class="text-3xl font-bold text-gray-700 mb-4">Chưa có laptop nào để so sánh</h3>
+                <p class="text-xl text-gray-500 mb-8">Hãy chọn ít nhất 2 laptop để bắt đầu so sánh</p>
+                <a asp-action="SelectForCompare" class="add-more-btn">
+                    <span>🔍</span>
+                    Chọn laptop ngay
+                </a>
+            </div>
+        }
+    </div>
 </section>

@@ -1,84 +1,354 @@
-﻿@model IEnumerable<LaptopConsultant.Models.Laptop>
-@{
-    ViewData["Title"] = "Trang chủ";
-}
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ - Laptop Consultant</title>
+    <link href="/css/site.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+       
 
-<!-- Hero Section -->
-<section class="relative bg-gradient-to-r from-blue-50 to-blue-100 overflow-hidden py-12">
-    <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
-        <div class="md:w-1/2 mb-6 md:mb-0 animate-fade-in">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Tìm laptop phù hợp với bạn</h1>
-            <p class="text-base text-gray-700 mb-6">Hệ thống tư vấn thông minh giúp bạn tìm chiếc laptop hoàn hảo.</p>
-            <div class="flex space-x-3">
-                <a href="@Url.Action("Index", "Laptop")" class="btn-primary bg-primary text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm">
-                    Tư vấn ngay
-                </a>
-                <a href="@Url.Action("Compare", "Laptop")" class="btn-primary bg-white text-primary px-6 py-2 rounded-md border border-primary hover:bg-blue-50 transition-colors text-sm">
-                    So sánh laptop
-                </a>
-            </div>
-        </div>
-        <div class="md:w-1/2 relative animate-fade-in-right">
-            <img src="https://readdy.ai/api/search-image?query=modern%20laptop%20floating%20with%20colorful%20light%20effects%2C%20minimalist%20clean%20background%2C%20product%20photography%2C%20high-end%20professional%20photo%2C%20soft%20lighting%2C%20tech%20advertisement%20style%2C%20white%20and%20blue%20color%20scheme%2C%20clean%20design&width=600&height=400&seq=1&orientation=landscape" alt="Laptop tư vấn" class="w-full h-auto object-cover rounded-lg shadow-xl">
-        </div>
-    </div>
-</section>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
 
-<!-- Featured Laptops Section -->
-<section class="container mx-auto px-4 py-12">
-    <div class="text-center mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3 animate-fade-in">Laptop nổi bật</h2>
-        <p class="text-gray-600 text-sm max-w-xl mx-auto">Khám phá những mẫu laptop được yêu thích nhất hiện nay.</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach (var laptop in Model)
-        {
-            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden transform transition-transform hover:-translate-y-1 hover:shadow-lg">
-                <div class="relative">
-                    <img src="@laptop.ImageUrl" alt="@laptop.Name" class="w-full h-40 object-cover object-top">
-                    <div class="absolute top-1 right-1 bg-primary text-white text-xs font-medium px-1.5 py-0.5 rounded">Nổi bật</div>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+            .card-hover:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            }
+
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+       
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .fade-in-right {
+            animation: fadeInRight 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        .fade-in-left {
+            animation: fadeInLeft 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        .stagger-1 {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.4s;
+        }
+
+        
+
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+            .btn-primary::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                transition: left 0.5s;
+            }
+
+            .btn-primary:hover::before {
+                left: 100%;
+            }
+
+        .primary-color {
+            color: #667eea;
+        }
+
+        .bg-primary {
+            background-color: #667eea;
+        }
+
+        .border-primary {
+            border-color: #667eea;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-pattern {
+            background-image: radial-gradient(circle at 25% 25%, rgba(102, 126, 234, 0.1) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+        }
+
+        .laptop-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .price-highlight {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .icon-glow {
+            filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.3));
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Hero Section -->
+    <section class="bg-white relative min-h-screen flex items-center justify-center overflow-hidden hero-pattern">
+        <!-- Decorative Elements -->
+        <div class="absolute top-20 left-10 w-32 h-32 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 floating-animation"></div>
+        <div class="absolute top-40 right-10 w-32 h-32 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 floating-animation" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-20 left-20 w-32 h-32 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 floating-animation" style="animation-delay: 4s;"></div>
+
+        <div class="container mx-auto px-6 py-20">
+            <div class="flex flex-col lg:flex-row items-center">
+                <!-- Left Content -->
+                <div class="lg:w-1/2 mb-12 lg:mb-0 fade-in-left">
+                    <div class="relative">
+                        <h1 class="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+                            Tìm laptop
+                            <span class="text-gradient">phù hợp</span>
+                            với bạn
+                        </h1>
+                        <p class="text-xl text-gray-600 mb-8 leading-relaxed max-w-lg">
+                            Hệ thống tư vấn thông minh với AI giúp bạn tìm chiếc laptop hoàn hảo trong vài phút.
+                        </p>
+
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                            <a href="@Url.Action("Index", "Laptop")" class="btn-primary bg-primary text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm btn-primary bg-primary text-white px-8 py-4 rounded-2xl hover:bg-purple-600 transition-all duration-300 text-lg font-semibold shadow-lg hover:shadow-xl">
+                                <i class="ri-robot-line mr-2"></i>
+                                Tư vấn ngay
+                            </a>
+                            <a href="@Url.Action("Compare", "Laptop")" class="text-white btn-primary bg-white text-primary px-8 py-4 rounded-2xl border-2 border-primary hover:bg-purple-50 transition-all duration-300 text-lg font-semibold">
+                                <i class="ri-scales-line mr-2"></i>
+                                So sánh laptop
+                            </a>
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="flex space-x-8 mt-12">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-gradient">1000+</div>
+                                <div class="text-gray-600 text-sm">Laptop được tư vấn</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-gradient">98%</div>
+                                <div class="text-gray-600 text-sm">Khách hàng hài lòng</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-gradient">24/7</div>
+                                <div class="text-gray-600 text-sm">Hỗ trợ tư vấn</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="p-4">
-                    <h4 class="text-base font-semibold text-gray-900 mb-2">@laptop.Name</h4>
-                    <div class="flex items-center mb-1">
-                        <i class="ri-cpu-line text-primary mr-1 text-sm"></i>
-                        <span class="text-xs text-gray-600">@laptop.CPU</span>
-                    </div>
-                    <div class="flex items-center mb-1">
-                        <i class="ri-hard-drive-line text-primary mr-1 text-sm"></i>
-                        <span class="text-xs text-gray-600">@laptop.RAM, @laptop.Storage</span>
-                    </div>
-                    <div class="flex items-center mb-3">
-                        <i class="ri-computer-line text-primary mr-1 text-sm"></i>
-                        <span class="text-xs text-gray-600">@laptop.Screen</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-base font-bold text-primary">@laptop.Price.ToString("N0") ₫</span>
-                        <div class="flex space-x-2">
-                            <form asp-action="AddToCompare" asp-controller="Laptop" method="post">
-                                <input type="hidden" name="laptopId" value="@laptop.Id" />
-                                <button type="submit" class="btn-primary bg-white text-primary p-2 rounded-full border border-primary hover:bg-blue-50 transition-colors">
-                                    <i class="ri-compare-line text-sm"></i>
-                                </button>
-                            </form>
-                            <a href="@Url.Action("Details", "Laptop", new { id = laptop.Id })" class="btn-primary bg-primary text-white px-3 py-1.5 rounded-md hover:bg-blue-600 transition-colors text-sm">Chi tiết</a>
+
+                <!-- Right Content -->
+                <div class="lg:w-1/2 relative fade-in-right">
+                    <div class="relative">
+                        <!-- Main Laptop Image -->
+                        <div class="relative z-10 floating-animation">
+                            <div class="glass-effect rounded-3xl p-8 shadow-2xl">
+                                <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=400&fit=crop&crop=center"
+                                     alt="Modern Laptop"
+                                     class="w-full h-auto object-cover rounded-2xl">
+                            </div>
+                        </div>
+
+                        <!-- Floating Cards -->
+                        <div class="absolute -top-4 -right-4 glass-effect rounded-2xl p-4 shadow-lg floating-animation" style="animation-delay: 1s;">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                                <span class="text-sm font-medium">AI đang phân tích...</span>
+                            </div>
+                        </div>
+
+                        <div class="absolute -bottom-4 -left-4 glass-effect rounded-2xl p-4 shadow-lg floating-animation" style="animation-delay: 2s;">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-gradient">4.9★</div>
+                                <div class="text-xs text-gray-600">Đánh giá trung bình</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        }
-    </div>
-</section>
+        </div>
+    </section>
 
-<style>
-    keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    keyframes fadeInRight {
-        from { opacity: 0; transform: translateX(10px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-    .animate-fade-in { animation: fadeIn 0.8s ease-out; }
-    .animate-fade-in-right { animation: fadeInRight 0.8s ease-out; }
-</style>
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <!-- Section Header -->
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl lg:text-5xl font-bold mb-6">
+                    Laptop <span class="text-gradient">nổi bật</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                    Khám phá những mẫu laptop được yêu thích nhất với công nghệ tiên tiến và thiết kế hiện đại.
+                </p>
+            </div>
+
+            <!-- Laptop Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @{
+                    var staggerClasses = new[] { "stagger-1", "stagger-2", "stagger-3" };
+                    var badgeStyles = new[]
+                    {
+                                "bg-gradient-to-r from-purple-500 to-pink-500",
+                                "bg-gradient-to-r from-blue-500 to-cyan-500",
+                                "bg-gradient-to-r from-red-500 to-orange-500",
+                                "bg-gradient-to-r from-green-500 to-teal-500",
+                                "bg-gradient-to-r from-yellow-500 to-orange-500"
+                                };
+                    var badges = new[] { "Nổi bật", "Mới nhất", "Gaming", "Văn phòng", "Cao cấp" };
+                    var index = 0;
+                }
+
+                @foreach (var laptop in Model)
+                {
+                    var staggerClass = staggerClasses[index % staggerClasses.Length];
+                    var badgeStyle = badgeStyles[index % badgeStyles.Length];
+                    var badge = badges[index % badges.Length];
+
+                    <div class="laptop-card rounded-3xl overflow-hidden card-hover fade-in @staggerClass">
+                        <div class="relative">
+                            <img src="@laptop.ImageUrl"
+                                 alt="@laptop.Name"
+                                 class="w-full h-64 object-cover">
+                            <div class="absolute top-4 right-4 @badgeStyle text-white text-sm font-semibold px-3 py-1 rounded-full shadow-lg">
+                                @badge
+                            </div>
+                        </div>
+
+                        <div class="p-6">
+                            <h4 class="text-xl font-bold text-gray-900 mb-4">@laptop.Name</h4>
+
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <i class="ri-cpu-line text-primary mr-3 text-lg icon-glow"></i>
+                                    <span class="text-gray-700">@laptop.CPU</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="ri-hard-drive-line text-primary mr-3 text-lg icon-glow"></i>
+                                    <span class="text-gray-700">@laptop.RAM, @laptop.Storage</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="ri-computer-line text-primary mr-3 text-lg icon-glow"></i>
+                                    <span class="text-gray-700">@laptop.Screen</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold price-highlight">@laptop.Price.ToString("N0") ₫</span>
+                                <div class="flex space-x-2">
+                                    <form asp-action="AddToCompare" asp-controller="Laptop" method="post" class="inline">
+                                        <input type="hidden" name="laptopId" value="@laptop.Id" />
+                                        <button type="submit" class="btn-primary bg-gray-100 text-primary p-3 rounded-full hover:bg-purple-50 transition-all duration-300 shadow-md hover:shadow-lg">
+                                            <i class="text-white ri-scales-line text-lg"></i>
+                                        </button>
+                                    </form>
+                                    <a href="@Url.Action("Details", "Laptop", new { id = laptop.Id })" class="btn-primary bg-primary text-white px-6 py-3 rounded-full hover:bg-purple-600 transition-all duration-300 shadow-md hover:shadow-lg font-semibold">
+                                        Chi tiết
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    index++;
+                }
+
+                <!-- View All Button -->
+                <div class="text-center mt-12 fade-in stagger-4">
+                    <a href="@Url.Action("Compare", "Laptop")" class="btn-primary bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-4 rounded-2xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 text-lg font-semibold shadow-lg hover:shadow-xl">
+                        <i class="ri-eye-line mr-2"></i>
+                        Xem tất cả laptop
+                    </a>
+                </div>
+            </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 fade-in">
+                <h3 class="text-4xl font-bold mb-6">Tại sao chọn chúng tôi?</h3>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Trải nghiệm tư vấn laptop thông minh với công nghệ AI tiên tiến
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-3xl p-8 shadow-lg card-hover fade-in stagger-1">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="ri-robot-line text-3xl text-white"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4">AI Thông Minh</h4>
+                    <p class="text-gray-600 leading-relaxed">
+                        Hệ thống AI học hỏi từ hàng ngàn trường hợp tư vấn để đưa ra gợi ý phù hợp nhất.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-3xl p-8 shadow-lg card-hover fade-in stagger-2">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="ri-time-line text-3xl text-white"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4">Nhanh Chóng</h4>
+                    <p class="text-gray-600 leading-relaxed">
+                        Chỉ trong vài phút, bạn sẽ có danh sách laptop phù hợp với nhu cầu và ngân sách.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-3xl p-8 shadow-lg card-hover fade-in stagger-3">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="ri-shield-check-line text-3xl text-white"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4">Đáng Tin Cậy</h4>
+                    <p class="text-gray-600 leading-relaxed">
+                        Thông tin laptop được cập nhật liên tục từ các nguồn chính thức và đáng tin cậy.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
