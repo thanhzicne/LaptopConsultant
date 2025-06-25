@@ -12,10 +12,10 @@
             <h1 class="text-5xl md:text-7xl font-bold mb-8 animate-fade-in-up bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
                 Tư vấn laptop thông minh
             </h1>
-            <p class="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto animate-fade-in-up animate-delay-1 leading-relaxed">
-                Chọn tiêu chí phù hợp, AI sẽ đề xuất laptop tối ưu với công nghệ machine learning tiên tiến.
+            <p class="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto animate-fade-in-up animate-delay-100 leading-relaxed">
+                Chọn tiêu chí phù hợp, AI sẽ đề xuất laptop tối ưu với công nghệ tiên tiến.
             </p>
-            <div class="mt-8 animate-fade-in-up animate-delay-2">
+            <div class="mt-8 animate-fade-in-up animate-delay-200">
                 <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-3">
                     <i class="ri-ai-generate text-2xl"></i>
                     <span class="text-lg font-medium">Được hỗ trợ bởi AI</span>
@@ -27,8 +27,7 @@
 
 <section id="tu-van" class="py-16 relative">
     <div class="container mx-auto px-4">
-        <form asp-action="Search" asp-controller="Laptop" method="post" class="glass-card p-8 md:p-12 animate-fade-in-up animate-delay-2 max-w-6xl mx-auto">
-
+        <form asp-action="Search" asp-controller="Laptop" method="post" class="glass-card p-8 md:p-12 animate-fade-in-up animate-delay-200 max-w-6xl mx-auto">
             <!-- Nhu cầu sử dụng -->
             <div class="filter-section">
                 <h4 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8 flex items-center">
@@ -39,15 +38,15 @@
                 </h4>
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
                     @foreach (var need in new[] {
-                                        new { Value = "gaming", Icon = "ri-gamepad-line", Label = "Gaming", Color = "from-red-500 to-pink-500" },
-                                        new { Value = "hoc-tap", Icon = "ri-book-open-line", Label = "Học tập", Color = "from-blue-500 to-indigo-500" },
-                                        new { Value = "do-hoa", Icon = "ri-brush-line", Label = "Đồ họa", Color = "from-purple-500 to-pink-500" },
-                                        new { Value = "lap-trinh", Icon = "ri-code-s-slash-line", Label = "Lập trình", Color = "from-green-500 to-teal-500" },
-                                        new { Value = "van-phong", Icon = "ri-file-text-line", Label = "Văn phòng", Color = "from-purple-500 to-pink-500" }
+                                        new { Value = "Gaming", Icon = "ri-gamepad-line", Label = "Gaming", Color = "from-red-500 to-pink-500" },
+                                        new { Value = "Productivity", Icon = "ri-book-open-line", Label = "Học tập", Color = "from-blue-500 to-indigo-500" },
+                                        new { Value = "Creative Work", Icon = "ri-brush-line", Label = "Đồ họa", Color = "from-purple-500 to-pink-500" },
+                                        new { Value = "Workstation", Icon = "ri-code-s-slash-line", Label = "Lập trình", Color = "from-green-500 to-teal-500" },
+                                        new { Value = "2-in-1", Icon = "ri-file-text-line", Label = "Văn phòng", Color = "from-purple-500 to-pink-500" }
                                         })
                     {
                         <label class="custom-checkbox need-item cursor-pointer group tooltip" data-tooltip="Chọn @need.Label">
-                            <input type="checkbox" name="needs" value="@need.Value" aria-label="@need.Label">
+                            <input type="checkbox" name="Needs" value="@need.Value" aria-label="@need.Label" @(Model.Needs.Contains(need.Value) ? "checked" : "")>
                             <span class="checkmark"></span>
                             <div class="flex flex-col items-center relative z-10">
                                 <div class="w-14 h-14 bg-gradient-to-br @need.Color rounded-xl flex items-center justify-center text-white mb-3 group-hover:scale-110 transition-all duration-300 shadow-lg">
@@ -70,18 +69,18 @@
                 </h4>
                 <div class="bg-white/90 rounded-2xl p-6 border border-white/30 backdrop-blur-sm">
                     <div class="flex justify-between mb-6 text-sm text-gray-600 font-medium">
-                        <span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-bold">5 triệu</span>
-                        <span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-bold">10 triệu</span>
-                        <span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-bold">15 triệu</span>
                         <span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-bold">20 triệu</span>
-                        <span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-bold">25 triệu</span>
-                        <span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-bold">30+ triệu</span>
+                        <span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-bold">30 triệu</span>
+                        <span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-bold">40 triệu</span>
+                        <span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-bold">50 triệu</span>
+                        <span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-bold">60 triệu</span>
+                        <span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-bold">70+ triệu</span>
                     </div>
-                    <input type="range" min="5" max="30" step="1" value="15" class="range-slider" id="budgetRange" aria-label="Chọn ngân sách">
+                    <input type="range" min="20" max="70" step="5" value="@(Model.Budget > 0 ? Model.Budget / 1000000 : 20)" class="range-slider" id="budgetRange" aria-label="Chọn ngân sách">
                     <div class="mt-6 text-center">
                         <div class="inline-flex items-center bg-gradient-to-r from-blue-500 to-purple-500 rounded-full px-6 py-3">
                             <i class="ri-money-dollar-circle-line text-white text-xl mr-2"></i>
-                            <span class="text-2xl font-bold text-white" id="budgetValue">15 triệu VNĐ</span>
+                            <span class="text-2xl font-bold text-white" id="budgetValue">@(Model.Budget > 0 ? (Model.Budget / 1000000) : 20) triệu VNĐ</span>
                         </div>
                     </div>
                 </div>
@@ -95,19 +94,22 @@
                     </div>
                     Thương hiệu
                 </h4>
-                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-6">
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-6">
                     @foreach (var brand in new[] {
-                                        new { Name = "Dell", Color = "from-blue-600 to-blue-700" },
-                                        new { Name = "HP", Color = "from-indigo-600 to-indigo-700" },
                                         new { Name = "Asus", Color = "from-orange-600 to-red-600" },
                                         new { Name = "Lenovo", Color = "from-red-600 to-pink-600" },
                                         new { Name = "Acer", Color = "from-green-600 to-emerald-600" },
+                                        new { Name = "Microsoft", Color = "from-blue-600 to-blue-700" },
+                                        new { Name = "Samsung", Color = "from-indigo-600 to-indigo-700" },
                                         new { Name = "MSI", Color = "from-purple-600 to-violet-600" },
+                                        new { Name = "Razer", Color = "from-green-600 to-teal-600" },
+                                        new { Name = "Dell", Color = "from-blue-600 to-blue-700" },
+                                        new { Name = "HP", Color = "from-indigo-600 to-indigo-700" },
                                         new { Name = "Apple", Color = "from-gray-600 to-gray-700" }
                                         })
                     {
                         <label class="custom-checkbox need-item cursor-pointer group">
-                            <input type="checkbox" name="brands" value="@brand.Name.ToLower()" aria-label="@brand.Name">
+                            <input type="checkbox" name="Brands" value="@brand.Name" aria-label="@brand.Name" @(Model.Brands.Contains(brand.Name) ? "checked" : "")>
                             <span class="checkmark"></span>
                             <div class="text-center relative z-10">
                                 <div class="brand-logo bg-gradient-to-br @brand.Color mx-auto mb-2 group-hover:rotate-12 transition-transform duration-300">
@@ -133,11 +135,11 @@
                                         new { Size = "13", Description = "Siêu di động" },
                                         new { Size = "14", Description = "Cân bằng" },
                                         new { Size = "15.6", Description = "Phổ biến" },
-                                        new { Size = "17", Description = "Màn hình lớn" }
+                                        new { Size = "14.4", Description = "Độc đáo" }
                                         })
                     {
                         <label class="custom-radio need-item cursor-pointer group flex flex-col items-center p-6">
-                            <input type="radio" name="screenSize" value="@size.Size" aria-label="@size.Size inch">
+                            <input type="radio" name="ScreenSize" value="@size.Size" aria-label="@size.Size inch" @(Model.ScreenSize == size.Size ? "checked" : "")>
                             <span class="radio-mark mb-3"></span>
                             <div class="text-center relative z-10">
                                 <div class="text-2xl font-bold text-gray-800 mb-1">@size.Size"</div>
@@ -174,13 +176,13 @@
                             </h4>
                             <div class="space-y-3">
                                 @foreach (var ram in new[] {
-                                                                new { Value = "8", Label = "8 GB", Description = "Cơ bản" },
-                                                                new { Value = "16", Label = "16 GB", Description = "Tối ưu" },
-                                                                new { Value = "32", Label = "32 GB", Description = "Chuyên nghiệp" }
+                                                                new { Value = "8GB", Label = "8 GB", Description = "Cơ bản" },
+                                                                new { Value = "16GB", Label = "16 GB", Description = "Tối ưu" },
+                                                                new { Value = "32GB", Label = "32 GB", Description = "Chuyên nghiệp" }
                                                                 })
                                 {
                                     <label class="custom-radio flex items-center p-3 bg-white/70 rounded-xl hover:bg-white/90 transition-all cursor-pointer">
-                                        <input type="radio" name="ram" value="@ram.Value" aria-label="@ram.Label RAM">
+                                        <input type="radio" name="RAM" value="@ram.Value" aria-label="@ram.Label RAM" @(Model.RAM == ram.Value ? "checked" : "")>
                                         <span class="radio-mark mr-3"></span>
                                         <div>
                                             <span class="text-gray-800 font-semibold">@ram.Label</span>
@@ -201,13 +203,13 @@
                             </h4>
                             <div class="space-y-3">
                                 @foreach (var storage in new[] {
-                                                                new { Value = "256", Label = "256 GB", Description = "Cơ bản" },
-                                                                new { Value = "512", Label = "512 GB", Description = "Tối ưu" },
-                                                                new { Value = "1000", Label = "1 TB", Description = "Rộng rãi" }
+                                                                new { Value = "128GB SSD", Label = "128 GB", Description = "Cơ bản" },
+                                                                new { Value = "512GB SSD", Label = "512 GB", Description = "Tối ưu" },
+                                                                new { Value = "1TB SSD", Label = "1 TB", Description = "Rộng rãi" }
                                                                 })
                                 {
                                     <label class="custom-radio flex items-center p-3 bg-white/70 rounded-xl hover:bg-white/90 transition-all cursor-pointer">
-                                        <input type="radio" name="storage" value="@storage.Value" aria-label="@storage.Label SSD">
+                                        <input type="radio" name="Storage" value="@storage.Value" aria-label="@storage.Label SSD" @(Model.Storage == storage.Value ? "checked" : "")>
                                         <span class="radio-mark mr-3"></span>
                                         <div>
                                             <span class="text-gray-800 font-semibold">@storage.Label</span>
@@ -234,11 +236,91 @@
                                                                 })
                                 {
                                     <label class="custom-checkbox flex items-center p-3 bg-white/70 rounded-xl hover:bg-white/90 transition-all cursor-pointer">
-                                        <input type="checkbox" name="cpu" value="@cpu.Value" aria-label="@cpu.Label">
+                                        <input type="checkbox" name="CPUs" value="@cpu.Value" aria-label="@cpu.Label" @(Model.CPUs.Contains(cpu.Value) ? "checked" : "")>
                                         <span class="checkmark mr-3"></span>
                                         <div>
                                             <span class="text-gray-800 font-semibold">@cpu.Label</span>
                                             <span class="text-gray-600 text-sm ml-2">(@cpu.Description)</span>
+                                        </div>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- GPU -->
+                        <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-6 border border-orange-200/50">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="ri-vidicon-line text-white text-sm"></i>
+                                </div>
+                                GPU
+                            </h4>
+                            <div class="space-y-3">
+                                @foreach (var gpu in new[] {
+                                                                new { Value = "rtx", Label = "Nvidia RTX", Description = "Hiệu năng cao" },
+                                                                new { Value = "iris", Label = "Intel Iris Xe", Description = "Tiết kiệm năng lượng" },
+                                                                new { Value = "quadro", Label = "Nvidia Quadro", Description = "Chuyên nghiệp" }
+                                                                })
+                                {
+                                    <label class="custom-checkbox flex items-center p-3 bg-white/70 rounded-xl hover:bg-white/90 transition-all cursor-pointer">
+                                        <input type="checkbox" name="GPUs" value="@gpu.Value" aria-label="@gpu.Label" @(Model.GPUs.Contains(gpu.Value) ? "checked" : "")>
+                                        <span class="checkmark mr-3"></span>
+                                        <div>
+                                            <span class="text-gray-800 font-semibold">@gpu.Label</span>
+                                            <span class="text-gray-600 text-sm ml-2">(@gpu.Description)</span>
+                                        </div>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- OS -->
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200/50">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="ri-windows-line text-white text-sm"></i>
+                                </div>
+                                Hệ điều hành
+                            </h4>
+                            <div class="space-y-3">
+                                @foreach (var os in new[] {
+                                                                new { Value = "Windows 11 Home", Label = "Windows 11 Home", Description = "Phổ thông" },
+                                                                new { Value = "Windows 11 Pro", Label = "Windows 11 Pro", Description = "Chuyên nghiệp" }
+                                                                })
+                                {
+                                    <label class="custom-radio flex items-center p-3 bg-white/70 rounded-xl hover:bg-white/90 transition-all cursor-pointer">
+                                        <input type="radio" name="OS" value="@os.Value" aria-label="@os.Label" @(Model.OS == os.Value ? "checked" : "")>
+                                        <span class="radio-mark mr-3"></span>
+                                        <div>
+                                            <span class="text-gray-800 font-semibold">@os.Label</span>
+                                            <span class="text-gray-600 text-sm ml-2">(@os.Description)</span>
+                                        </div>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Weight -->
+                        <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200/50">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <div class="w-8 h-8 bg-gradient-to-br from-gray-500 to-gray-600 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="ri-weight-line text-white text-sm"></i>
+                                </div>
+                                Trọng lượng
+                            </h4>
+                            <div class="space-y-3">
+                                @foreach (var weight in new[] {
+                                                                new { Value = "1.0", Label = "Dưới 1.5kg", Description = "Siêu nhẹ" },
+                                                                new { Value = "1.5", Label = "1.5 - 2.0kg", Description = "Cân bằng" },
+                                                                new { Value = "2.0", Label = "Trên 2.0kg", Description = "Nặng" }
+                                                                })
+                                {
+                                    <label class="custom-radio flex items-center p-3 bg-white/70 rounded-xl hover:bg-white/90 transition-all cursor-pointer">
+                                        <input type="radio" name="Weight" value="@weight.Value" aria-label="@weight.Label" @(Model.Weight.ToString() == weight.Value ? "checked" : "")>
+                                        <span class="radio-mark mr-3"></span>
+                                        <div>
+                                            <span class="text-gray-800 font-semibold">@weight.Label</span>
+                                            <span class="text-gray-600 text-sm ml-2">(@weight.Description)</span>
                                         </div>
                                     </label>
                                 }
@@ -255,7 +337,10 @@
                     <span class="relative z-10">Tìm laptop phù hợp</span>
                     <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </button>
-
+                <button type="button" onclick="window.location.href='@Url.Action("Index", "Laptop")'" class="btn-primary text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-600 transition-all flex items-center mx-auto mt-4">
+                    <i class="ri-refresh-line mr-1"></i>
+                    Xóa bộ lọc
+                </button>
             </div>
         </form>
 
@@ -274,12 +359,12 @@
                             </h3>
                             <div class="flex items-center">
                                 <span class="text-gray-600 mr-3 text-sm font-medium">Sắp xếp:</span>
-                                <div class="relative">
+                                <div class="relative sortDropdown">
                                     <button id="sortDropdown" class="sort-dropdown flex items-center justify-between px-4 py-2 text-gray-700 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[140px]" aria-haspopup="true" aria-expanded="false">
                                         <span id="sortSelected" class="font-medium">Phổ biến</span>
                                         <i class="ri-arrow-down-s-line ml-2 transition-transform duration-200"></i>
                                     </button>
-                                    <div id="sortMenu" class="dropdown-menu mt-2 p-2 w-48">
+                                    <div id="sortMenu" class="dropdown-menu mt-2 p-2 w-48 hidden">
                                         @foreach (var option in new[] {
                                                                         new { Value = "popular", Label = "Phổ biến", Icon = "ri-fire-line" },
                                                                         new { Value = "price-asc", Label = "Giá tăng dần", Icon = "ri-arrow-up-line" },
@@ -348,7 +433,6 @@
                                                         <i class="text-white ri-scales-line text-lg"></i>
                                                     </button>
                                                 </form>
-                                                
                                                 <a href="@Url.Action("Details", "Laptop", new { id = laptop.Id })" class="btn-primary text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-600 transition-all flex items-center">
                                                     <i class="ri-eye-line mr-1"></i>
                                                     Chi tiết
@@ -378,31 +462,34 @@
                                 Đề xuất bởi AI
                             </h4>
                             <div class="space-y-4">
-                                @foreach (var laptop in Model.Laptops.Where(l => l.IsFeatured).Take(2))
+                                @if (ViewBag.RecommendedLaptops != null)
                                 {
-                                    <div class="ai-suggestion group cursor-pointer">
-                                        <div class="flex items-center">
-                                            <img src="@laptop.ImageUrl" alt="@laptop.Name" class="w-16 h-12 object-cover rounded-lg mr-3 group-hover:scale-105 transition-transform">
-                                            <div class="flex-1">
-                                                <h5 class="font-semibold text-gray-900 line-clamp-1 text-sm">@laptop.Name</h5>
-                                                <p class="text-xs text-gray-600 flex items-center mt-1">
-                                                    <i class="ri-check-line text-green-500 mr-1"></i>
-                                                    Phù hợp với nhu cầu của bạn
-                                                </p>
-                                                <div class="flex items-center mt-2">
-                                                    <span class="text-sm font-bold text-blue-600">@laptop.Price.ToString("N0") VNĐ</span>
-                                                    <div class="flex ml-2">
-                                                        @for (int i = 0; i < 5; i++)
-                                                        {
-                                                            <i class="ri-star-fill text-yellow-400 text-xs"></i>
-                                                        }
+                                    foreach (var laptop in ViewBag.RecommendedLaptops as List<LaptopConsultant.Models.Laptop>)
+                                    {
+                                        <a href="@Url.Action("Details", "Laptop", new { id = laptop.Id })" class="ai-suggestion group block cursor-pointer">
+                                            <div class="flex items-center">
+                                                <img src="@laptop.ImageUrl" alt="@laptop.Name" class="w-16 h-12 object-cover rounded-lg mr-3 group-hover:scale-105 transition-transform">
+                                                <div class="flex-1">
+                                                    <h5 class="font-semibold text-gray-900 line-clamp-1 text-sm group-hover:text-blue-600 transition-colors">@laptop.Name</h5>
+                                                    <p class="text-xs text-gray-600 flex items-center mt-1">
+                                                        <i class="ri-check-line text-green-500 mr-1"></i>
+                                                        Phù hợp với nhu cầu của bạn
+                                                    </p>
+                                                    <div class="flex items-center mt-2">
+                                                        <span class="text-sm font-bold text-blue-600">@laptop.Price.ToString("N0") VNĐ</span>
+                                                        <div class="flex ml-2">
+                                                            @for (int i = 0; i < 5; i++)
+                                                            {
+                                                                <i class="ri-star-fill text-yellow-400 text-xs"></i>
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </a>
+                                    }
                                 }
-                                @if (!Model.Laptops.Where(l => l.IsFeatured).Any())
+                                @if (ViewBag.RecommendedLaptops == null || !(ViewBag.RecommendedLaptops as List<LaptopConsultant.Models.Laptop>).Any())
                                 {
                                     <div class="text-center py-8">
                                         <div class="w-16 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -433,7 +520,7 @@
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-sm text-gray-600">Đề xuất AI</span>
-                                    <span class="font-bold text-purple-600">@Model.Laptops.Count(l => l.IsFeatured)</span>
+                                    <span class="font-bold text-purple-600">@(ViewBag.RecommendedLaptops != null ? (ViewBag.RecommendedLaptops as List<LaptopConsultant.Models.Laptop>).Count : 0)</span>
                                 </div>
                             </div>
                         </div>
@@ -445,11 +532,9 @@
 </section>
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script src="~/js/dropdown.js" defer></script>
     <script src="~/js/rangeSlider.js" defer></script>
     <script src="~/js/advancedFilter.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             @if (TempData["Success"] != null)
@@ -458,7 +543,7 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Thành công!',
-                               text: @Html.Raw(Json.Serialize(TempData["Success"]))
+                            text: @Html.Raw(Json.Serialize(TempData["Success"]))
                         });
                     </text>
             }
@@ -469,13 +554,10 @@
                         Swal.fire({
                             icon: 'warning',
                             title: 'Chú ý!',
-                                    text: @Html.Raw(Json.Serialize(TempData["Warning"]))
-
+                            text: @Html.Raw(Json.Serialize(TempData["Warning"]))
                         });
                     </text>
             }
-
-
         });
     </script>
 }

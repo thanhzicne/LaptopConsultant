@@ -1,4 +1,5 @@
-﻿using LaptopConsultant.Models;
+﻿
+using LaptopConsultant.Models;
 using LaptopConsultant.Services;
 using LaptopConsultant.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -31,7 +32,10 @@ namespace LaptopConsultant.Controllers
             var laptops = await _laptopService.FilterLaptopsAsync(filter);
             filter.Laptops = laptops;
 
-            // Ví dụ thêm: nếu không tìm thấy laptop phù hợp
+            // Lấy 2 laptop được đề xuất bởi AI
+            var recommendedLaptops = _laptopService.GetRecommendedLaptops(laptops, filter);
+            ViewBag.RecommendedLaptops = recommendedLaptops;
+
             if (laptops == null || !laptops.Any())
             {
                 TempData["Warning"] = "Không tìm thấy laptop phù hợp với tiêu chí.";
@@ -65,7 +69,7 @@ namespace LaptopConsultant.Controllers
             }
             var compareList = HttpContext.Session.GetObject<List<int>>("CompareList") ?? new List<int>();
             var viewModel = new CompareViewModel { Laptops = laptops };
-            ViewBag.CompareList = compareList; // Truyền danh sách đã chọn vào view
+            ViewBag.CompareList = compareList;
             return View("SelectForCompare", viewModel);
         }
 
@@ -141,7 +145,7 @@ namespace LaptopConsultant.Controllers
             {
                 return RedirectToAction("SelectForCompare");
             }
-            return View("Compare", viewModel); // Ở lại trang so sánh nếu còn ít nhất 2 sản phẩm
+            return View("Compare", viewModel);
         }
 
         // POST: /Laptop/CompareNow
